@@ -1,7 +1,7 @@
 const app = {
     start() {
         $(document).ready(function () {
-            $('#table-output').DataTable({
+            table = $('#table-output').DataTable({
                 dom: 'Bfrtip',
                 lengthMenu: [
                     [ 10, 25, 50, -1 ],
@@ -11,6 +11,15 @@ const app = {
                     'pageLength', 'copy', 'csv', 'excel', 'pdf', 'print'
                 ]
             });
+
+            function insertData(){
+                table.row.add([
+                    'a',
+                    'b',
+                    'c',
+                    'd'
+                ]).draw(true);
+            }
         });
     }
 };
