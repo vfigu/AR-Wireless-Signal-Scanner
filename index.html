@@ -1,11 +1,15 @@
 <!DOCTYPE html>
-<html lang="en"><head>
+<html lang="en">
+  <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="Sample illustrating the use of Web Bluetooth / Scanning.">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
     <title>AR Wireless Signal Scanner / Prototype</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
     <script async="" src="https://www.google-analytics.com/analytics.js"></script><script>
       // Add a global error event listener early on in the page load, to help ensure that browsers
       // which don't support specific functionality still end up displaying a meaningful message.
@@ -16,207 +20,218 @@
           error.preventDefault();
         }
       });
-    </script>   
+    </script>
     <link rel="stylesheet" href="../styles/main.css">
   </head>
 
   <body>
-        <h1>AR Wireless Signal Scanner (Prototype)</h1>
+    <h1>AR Wireless Signal Scanner (Prototype)</h1>
     <script>
-  if('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js');
-  }
-</script>
+      if('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('service-worker.js');
+      }
+    </script>
 
-<script>
-  window.addEventListener('DOMContentLoaded', function() {
-    const searchParams = new URL(location).searchParams;
-    const inputs = Array.from(document.querySelectorAll('input[id]'));
+    <script>
+      window.addEventListener('DOMContentLoaded', function() {
+        const searchParams = new URL(location).searchParams;
+        const inputs = Array.from(document.querySelectorAll('input[id]'));
 
-    inputs.forEach(input => {
-      if (searchParams.has(input.id)) {
-        if (input.type == 'checkbox') {
-          input.checked = searchParams.get(input.id);
-        } else {
-          input.value = searchParams.get(input.id);
-          input.blur();
+        inputs.forEach(input => {
+          if (searchParams.has(input.id)) {
+            if (input.type == 'checkbox') {
+              input.checked = searchParams.get(input.id);
+            } else {
+              input.value = searchParams.get(input.id);
+              input.blur();
+            }
+          }
+          if (input.type == 'checkbox') {
+            input.addEventListener('change', function(event) {
+              const newSearchParams = new URL(location).searchParams;
+              if (event.target.checked) {
+                newSearchParams.set(input.id, event.target.checked);
+              } else {
+                newSearchParams.delete(input.id);
+              }
+              history.replaceState({}, '', Array.from(newSearchParams).length ?
+                  location.pathname + '?' + newSearchParams : location.pathname);
+            });
+          } else {
+            input.addEventListener('input', function(event) {
+              const newSearchParams = new URL(location).searchParams;
+              if (event.target.value) {
+                newSearchParams.set(input.id, event.target.value);
+              } else {
+                newSearchParams.delete(input.id);
+              }
+              history.replaceState({}, '', Array.from(newSearchParams).length ?
+                  location.pathname + '?' + newSearchParams : location.pathname);
+            });
+          }
+        });
+      });
+    </script>
+
+    <p>This prototype implements Web Bluetooth Scanning API to
+    report advertising packets from nearby Bluetooth Low Energy Devices.</p>
+
+    <p>Note: Scanning is still under development. You must be using Chrome 79+
+    with the <code>chrome://flags/#enable-experimental-web-platform-features</code>
+    flag enabled.</p>
+
+    <form>
+      <label for="allAdvertisements">All Advertisements</label>
+      <input id="allAdvertisements" type="checkbox">
+      <input id="name" type="text" size="20" placeholder="Device Name">
+      <input id="deviceID" type="text" size="20" placeholder="Device ID">
+      <button>Start Bluetooth Scan</button>
+    </form>
+
+    <script>
+      var ChromeSamples = {
+        log: function() {
+          var line = Array.prototype.slice.call(arguments).map(function(argument) {
+            return typeof argument === 'string' ? argument : JSON.stringify(argument);
+          }).join(' ');
+
+          document.querySelector('#log').textContent += line + '\n';
+        },
+
+        clearLog: function() {
+          document.querySelector('#log').textContent = '';
+        },
+
+        setStatus: function(status) {
+          document.querySelector('#status').textContent = status;
+        },
+
+        setContent: function(newContent) {
+          var content = document.querySelector('#content');
+          while(content.hasChildNodes()) {
+            content.removeChild(content.lastChild);
+          }
+          content.appendChild(newContent);
+        }
+      };
+    </script>
+
+    <h3>Live Output</h3>
+    <div id="output" class="output">
+      <div id="content"></div>
+      <div id="status"></div>
+      <pre id="log"></pre>
+    </div>
+    <div>
+        <table id="table-output" class="display nowrap" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Device ID</th>
+                    <th>Name</th>
+                    <th>RSSI</th>
+                    <th>TimeStamp</th>
+                </tr>
+            </thead>
+            <tbody id="table-output-row">
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+      if (/Chrome\/(\d+\.\d+.\d+.\d+)/.test(navigator.userAgent)){
+        // Let's log a warning if the sample is not supposed to execute on this
+        // version of Chrome.
+        if (79 > parseInt(RegExp.$1)) {
+          ChromeSamples.setStatus('Warning! Keep in mind this sample has been tested with Chrome ' + 79 + '.');
         }
       }
-      if (input.type == 'checkbox') {
-        input.addEventListener('change', function(event) {
-          const newSearchParams = new URL(location).searchParams;
-          if (event.target.checked) {
-            newSearchParams.set(input.id, event.target.checked);
-          } else {
-            newSearchParams.delete(input.id);
-          }
-          history.replaceState({}, '', Array.from(newSearchParams).length ?
-              location.pathname + '?' + newSearchParams : location.pathname);
-        });
+    </script>
+
+    <script>async function onButtonClick() {
+      let filters = [];
+
+      let filterName = document.querySelector('#name').value;
+      if (filterName) {
+        filters.push({name: filterName});
+      }
+
+      let filterDeviceID = document.querySelector('#deviceID').value;
+      if (filterDeviceID) {
+        filters.push({deviceID: filterDeviceID});
+      }
+
+      let options = {};
+      if (document.querySelector('#allAdvertisements').checked) {
+        options.acceptAllAdvertisements = true;
       } else {
-        input.addEventListener('input', function(event) {
-          const newSearchParams = new URL(location).searchParams;
-          if (event.target.value) {
-            newSearchParams.set(input.id, event.target.value);
-          } else {
-            newSearchParams.delete(input.id);
-          }
-          history.replaceState({}, '', Array.from(newSearchParams).length ?
-              location.pathname + '?' + newSearchParams : location.pathname);
+        options.filters = filters;
+      }
+
+      try {
+        log('Requesting Bluetooth Scan with options: ' + JSON.stringify(options));
+        const scan = await navigator.bluetooth.requestLEScan(options);
+
+        log('Scan started with:');
+        log(' acceptAllAdvertisements: ' + scan.acceptAllAdvertisements);
+        log(' active: ' + scan.active);
+        log(' keepRepeatedDevices: ' + scan.keepRepeatedDevices);
+        log(' filters: ' + JSON.stringify(scan.filters));
+
+        navigator.bluetooth.addEventListener('advertisementreceived', event => {
+          log('  Device ID: ' + event.device.id);
+          log('  Device Name: ' + event.device.name);
+          log('  RSSI: ' + event.rssi);
+          log('  Time: ' + event.timeStamp);
+
+          insertRow(event.device.id, event.device.name, event.rssi, event.timeStamp);
         });
+
+        setTimeout(stopScan, 20000);
+        function stopScan() {
+          log('Stopping scan...');
+          scan.stop();
+          log('Stopped.  scan.active = ' + scan.active);
+        }
+        function insertRow(deviceId, name, rssi, timeStamp) {
+            document.getElementById("output-table-row").innerHTML =
+                "<tr>" +
+                    "<td>"+ deviceId +"</td>" +
+                    "<td>"+ name +"</td>" +
+                    "<td>"+ rssi +"</td>" +
+                    "<td>"+ timeStamp +"</td>" +
+                "</tr>";
+        }
+      } catch(error)  {
+        log('Error: ' + error);
       }
-    });
-  });
-</script>
+    }
+    </script>
 
-<p>This prototype implements Web Bluetooth Scanning API to
-report advertising packets from nearby Bluetooth Low Energy Devices.</p>
+    <script>
+      document.querySelector('form').addEventListener('submit', function(event) {
+        event.stopPropagation();
+        event.preventDefault();
 
-<p>Note: Scanning is still under development. You must be using Chrome 79+
-with the <code>chrome://flags/#enable-experimental-web-platform-features</code>
-flag enabled.</p>
+        if (isWebBluetoothEnabled()) {
+          ChromeSamples.clearLog();
+          onButtonClick();
+        }
+      });
+    </script>
 
-<form>
-  <label for="allAdvertisements">All Advertisements</label>
-  <input id="allAdvertisements" type="checkbox">
-  <input id="name" type="text" size="17" placeholder="Device Name">
-  <input id="deviceID" type="text" size="17" placeholder="Device ID">
-  <button>Scan for Bluetooth Advertisements</button>
-</form>
+    <script>
+      log = ChromeSamples.log;
 
-<script>
-  var ChromeSamples = {
-    log: function() {
-      var line = Array.prototype.slice.call(arguments).map(function(argument) {
-        return typeof argument === 'string' ? argument : JSON.stringify(argument);
-      }).join(' ');
-
-      document.querySelector('#log').textContent += line + '\n';
-    },
-
-    clearLog: function() {
-      document.querySelector('#log').textContent = '';
-    },
-
-    setStatus: function(status) {
-      document.querySelector('#status').textContent = status;
-    },
-
-    setContent: function(newContent) {
-      var content = document.querySelector('#content');
-      while(content.hasChildNodes()) {
-        content.removeChild(content.lastChild);
+      function isWebBluetoothEnabled() {
+        if (navigator.bluetooth) {
+          return true;
+        } else {
+          ChromeSamples.setStatus('Web Bluetooth API is not available.\n' +
+              'Please make sure the "Experimental Web Platform features" flag is enabled.');
+          return false;
+        }
       }
-      content.appendChild(newContent);
-    }
-  };
-</script>
-
-<h3>Live Output</h3>
-<div id="output" class="output">
-  <div id="content"></div>
-  <div id="status"></div>
-  <pre id="log"></pre>
-</div>
-
-<script>
-  if (/Chrome\/(\d+\.\d+.\d+.\d+)/.test(navigator.userAgent)){
-    // Let's log a warning if the sample is not supposed to execute on this
-    // version of Chrome.
-    if (79 > parseInt(RegExp.$1)) {
-      ChromeSamples.setStatus('Warning! Keep in mind this sample has been tested with Chrome ' + 79 + '.');
-    }
-  }
-</script>
-
-      <script>async function onButtonClick() {
-  let filters = [];
-
-  let filterName = document.querySelector('#name').value;
-  if (filterName) {
-    filters.push({name: filterName});
-  }
-
-  let filterDeviceID = document.querySelector('#deviceID').value;
-  if (filterDeviceID) {
-    filters.push({deviceID: filterDeviceID});
-  }
-
-  let options = {};
-  if (document.querySelector('#allAdvertisements').checked) {
-    options.acceptAllAdvertisements = true;
-  } else {
-    options.filters = filters;
-  }
-
-  try {
-    log('Requesting Bluetooth Scan with options: ' + JSON.stringify(options));
-    const scan = await navigator.bluetooth.requestLEScan(options);
-
-    log('Scan started with:');
-    log(' acceptAllAdvertisements: ' + scan.acceptAllAdvertisements);
-    log(' active: ' + scan.active);
-    log(' keepRepeatedDevices: ' + scan.keepRepeatedDevices);
-    log(' filters: ' + JSON.stringify(scan.filters));
-
-    navigator.bluetooth.addEventListener('advertisementreceived', event => {
-      log('Advertisement received.');
-      log('  Device ID: ' + event.device.id);
-      log('  Device Name: ' + event.device.name);
-      log('  RSSI: ' + event.rssi);
-      log('  Time: ' + event.timeStamp);
-    });
-
-    setTimeout(stopScan, 20000);
-    function stopScan() {
-      log('Stopping scan...');
-      scan.stop();
-      log('Stopped.  scan.active = ' + scan.active);
-    }
-  } catch(error)  {
-    log('Argh! ' + error);
-  }
-}
-
-/* Utils */
-
-const logDataView = (labelOfDataSource, key, valueDataView) => {
-  const hexString = [...new Uint8Array(valueDataView.buffer)].map(b => {
-    return b.toString(16).padStart(2, '0');
-  }).join(' ');
-  const textDecoder = new TextDecoder('ascii');
-  const asciiString = textDecoder.decode(valueDataView.buffer);
-  log(`  ${labelOfDataSource} Data: ` + key +
-      '\n    (Hex) ' + hexString +
-      '\n    (ASCII) ' + asciiString);
-};
-</script> 
-
-<script>
-  document.querySelector('form').addEventListener('submit', function(event) {
-    event.stopPropagation();
-    event.preventDefault();
-
-    if (isWebBluetoothEnabled()) {
-      ChromeSamples.clearLog();
-      onButtonClick();
-    }
-  });
-</script>
-
-<script>
-  log = ChromeSamples.log;
-
-  function isWebBluetoothEnabled() {
-    if (navigator.bluetooth) {
-      return true;
-    } else {
-      ChromeSamples.setStatus('Web Bluetooth API is not available.\n' +
-          'Please make sure the "Experimental Web Platform features" flag is enabled.');
-      return false;
-    }
-  }
-</script>
+    </script>
   
     <script>
       /* jshint ignore:start */
