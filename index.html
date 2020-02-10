@@ -18,14 +18,11 @@
       });
     </script>   
     <link rel="stylesheet" href="../styles/main.css">
-    
   </head>
 
   <body>
-    
-    <h1>AR Wireless Signal Scanner (Prototype)</h1>
-    
-<script>
+        <h1>AR Wireless Signal Scanner (Prototype)</h1>
+    <script>
   if('serviceWorker' in navigator) {
     navigator.serviceWorker.register('service-worker.js');
   }
@@ -83,7 +80,7 @@ flag enabled.</p>
   <label for="allAdvertisements">All Advertisements</label>
   <input id="allAdvertisements" type="checkbox">
   <input id="name" type="text" size="17" placeholder="Device Name">
-  <input id="namePrefix" type="text" size="17" placeholder="Device Name Prefix">
+  <input id="deviceID" type="text" size="17" placeholder="Device ID">
   <button>Scan for Bluetooth Advertisements</button>
 </form>
 
@@ -122,7 +119,6 @@ flag enabled.</p>
   <pre id="log"></pre>
 </div>
 
-
 <script>
   if (/Chrome\/(\d+\.\d+.\d+.\d+)/.test(navigator.userAgent)){
     // Let's log a warning if the sample is not supposed to execute on this
@@ -141,9 +137,9 @@ flag enabled.</p>
     filters.push({name: filterName});
   }
 
-  let filterNamePrefix = document.querySelector('#namePrefix').value;
-  if (filterNamePrefix) {
-    filters.push({namePrefix: filterNamePrefix});
+  let filterDeviceID = document.querySelector('#deviceID').value;
+  if (filterDeviceID) {
+    filters.push({deviceID: filterDeviceID});
   }
 
   let options = {};
