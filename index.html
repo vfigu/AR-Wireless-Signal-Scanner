@@ -119,17 +119,7 @@ flag enabled.</p>
 <div id="output" class="output">
   <div id="content"></div>
   <div id="status"></div>
-  <pre id="log">Requesting Bluetooth Scan with options: {"acceptAllAdvertisements":true}
-Scan started with:
- acceptAllAdvertisements: true
- active: true
- keepRepeatedDevices: false
- filters: []
-Stopping scan...
-Stopped.  scan.active = false
-Stopping scan...
-Stopped.  scan.active = false
-</pre>
+  <pre id="log"></pre>
 </div>
 
 
@@ -175,17 +165,9 @@ Stopped.  scan.active = false
 
     navigator.bluetooth.addEventListener('advertisementreceived', event => {
       log('Advertisement received.');
-      log('  Device Name: ' + event.device.name);
       log('  Device ID: ' + event.device.id);
+      log('  Device Name: ' + event.device.name);
       log('  RSSI: ' + event.rssi);
-      log('  TX Power: ' + event.txPower);
-      log('  UUIDs: ' + event.uuids);
-      event.manufacturerData.forEach((valueDataView, key) => {
-        logDataView('Manufacturer', key, valueDataView);
-      });
-      event.serviceData.forEach((valueDataView, key) => {
-        logDataView('Service', key, valueDataView);
-      });
     });
 
     setTimeout(stopScan, 10000);
