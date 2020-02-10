@@ -14,9 +14,6 @@ const app = {
 $(document).ready(() => app.start());
 
 function insertDataRow(deviceId, name, rssi, timeStamp) {
-    $(document).ready(function() {
-        var t = $('#table-output').DataTable();
-
-        t.row.add([deviceId, name, rssi, timeStamp]).draw(false);
-    })
+    document.getElementById('#table-output')
+        .DataTable().row.add([deviceId, name, rssi, timeStamp]).draw(false);
 }
