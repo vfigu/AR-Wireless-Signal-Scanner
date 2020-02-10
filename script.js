@@ -12,14 +12,14 @@ const app = {
                 ]
             });
 
-            function insertData(){
+            $('#addRow').on( 'click', function () {
                 table.row.add([
                     'a',
                     'b',
                     'c',
                     'd'
                 ]).draw(true);
-            }
+            });
         });
     }
 };

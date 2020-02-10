@@ -189,7 +189,9 @@
           log('  RSSI: ' + event.rssi);
           log('  Time: ' + event.timeStamp);
 
-          insertData()
+          $(document).ready(function () {
+            $('#addRow').click();
+          })
         });
 
         setTimeout(stopScan, 20000);
