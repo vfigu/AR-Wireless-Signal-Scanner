@@ -193,7 +193,7 @@
           log('Stopped.  scan.active = ' + scan.active);
         }
         function insertRow(deviceId, name, rssi, timeStamp) {
-            document.getElementById("output-table-row").innerHTML =
+            document.getElementById("table-output-row").innerHTML +=
                 "<tr>" +
                     "<td>"+ deviceId +"</td>" +
                     "<td>"+ name +"</td>" +
