@@ -164,9 +164,10 @@ flag enabled.</p>
       log('  Device ID: ' + event.device.id);
       log('  Device Name: ' + event.device.name);
       log('  RSSI: ' + event.rssi);
+      log('  Time: ' + event.timeStamp);
     });
 
-    setTimeout(stopScan, 10000);
+    setTimeout(stopScan, 20000);
     function stopScan() {
       log('Stopping scan...');
       scan.stop();
