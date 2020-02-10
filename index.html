@@ -6,9 +6,10 @@
     <meta name="description" content="Sample illustrating the use of Web Bluetooth / Scanning.">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>AR Wireless Signal Scanner / Prototype</title>
+    <title>Bluetooth Scanner - Prototype</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css">
 
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
     <script async="" src="https://www.google-analytics.com/analytics.js"></script><script>
@@ -26,7 +27,9 @@
   </head>
 
   <body>
-    <h1>Bluetooth Scanner (Prototype)</h1>
+
+  <div class="container-fluid">
+    <h1>Bluetooth Scanner - Prototype</h1>
     <script>
       if('serviceWorker' in navigator) {
         navigator.serviceWorker.register('service-worker.js');
@@ -121,23 +124,24 @@
     <div id="output" class="output">
       <div id="content"></div>
       <div id="status"></div>
-      <div class="container-fluid">
-        <table id="table-output" class="display nowrap" style="width:100%">
-          <thead>
-          <tr>
-            <th>Device ID</th>
-            <th>Name</th>
-            <th>RSSI</th>
-            <th>TimeStamp</th>
-          </tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
-      </div>
+
+<!--      <button id="addRow">Add Data</button>-->
+      <table id="table-output" class="display nowrap" style="width:100%">
+        <thead>
+        <tr>
+          <th>Device ID</th>
+          <th>Name</th>
+          <th>RSSI</th>
+          <th>TimeStamp</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
       <br/>
       <pre id="log"></pre>
     </div>
+  </div>
 
     <script>
       if (/Chrome\/(\d+\.\d+.\d+.\d+)/.test(navigator.userAgent)){
@@ -185,7 +189,13 @@
           log('  RSSI: ' + event.rssi);
           log('  Time: ' + event.timeStamp);
 
-          insertDataRow(event.device.id, event.device.name, event.rssi, event.timeStamp);
+          var table = $('#table-output').DataTable();
+          table.add([
+            event.device.id,
+            event.device.name,
+            event.rssi,
+            event.timeStamp
+          ] ).draw( true );
         });
 
         setTimeout(stopScan, 20000);

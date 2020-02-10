@@ -3,8 +3,12 @@ const app = {
         $(document).ready(function () {
             $('#table-output').DataTable({
                 dom: 'Bfrtip',
+                lengthMenu: [
+                    [ 10, 25, 50, -1 ],
+                    [ '10 rows', '25 rows', '50 rows', 'Show all' ]
+                ],
                 buttons: [
-                    'copy', 'csv', 'excel', 'pdf', 'print'
+                    'pageLength', 'copy', 'csv', 'excel', 'pdf', 'print'
                 ]
             });
         });
@@ -12,8 +16,3 @@ const app = {
 };
 
 $(document).ready(() => app.start());
-
-function insertDataRow(deviceId, name, rssi, timeStamp) {
-    document.getElementById('#table-output')
-        .DataTable().row.add([deviceId, name, rssi, timeStamp]).draw(false);
-}
