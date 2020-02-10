@@ -31,6 +31,11 @@
   <div class="container-fluid">
     <h1>Bluetooth Scanner - Prototype</h1>
     <script>
+      DEVICE_ID = "-";
+      DEVICE_NAME = "-";
+      RSSI_VALUE = "-";
+      TIMESTAMP = "-";
+
       if('serviceWorker' in navigator) {
         navigator.serviceWorker.register('service-worker.js');
       }
@@ -192,6 +197,11 @@
           log('  RSSI: ' + event.rssi);
           log('  Time: ' + event.timeStamp);
 
+          DEVICE_ID = event.device.id;
+          DEVICE_NAME = event.device.name;
+          RSSI_VALUE = event.rssi;
+          TIMESTAMP = event.timeStamp;
+
           $(document).ready(function () {
             $('#addRow').click();
           })
@@ -232,6 +242,12 @@
               'Please make sure the "Experimental Web Platform features" flag is enabled.');
           return false;
         }
+      }
+    </script>
+
+    <script>
+      function insertData(deviceId, name, rssi, timeStamp) {
+
       }
     </script>
 

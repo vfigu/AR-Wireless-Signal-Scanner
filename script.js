@@ -14,10 +14,10 @@ const app = {
 
             $('#addRow').on( 'click', function () {
                 table.row.add([
-                    'N/A',
-                    'N/A',
-                    'N/A',
-                    'N/A'
+                    DEVICE_ID,
+                    DEVICE_NAME,
+                    RSSI_VALUE,
+                    TIMESTAMP
                 ]).draw(true);
             });
         });
