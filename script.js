@@ -17,7 +17,6 @@ function insertDataRow(deviceId, name, rssi, timeStamp) {
     $(document).ready(function() {
         var t = $('#table-output').DataTable();
 
-        $('#addRow').on( 'click', function () {
         t.row.add([deviceId, name, rssi, timeStamp]).draw(false);
-    });
-})}
+    })
+}
