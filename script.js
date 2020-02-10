@@ -14,10 +14,10 @@ const app = {
 
             $('#addRow').on( 'click', function () {
                 table.row.add([
-                    'a',
-                    'b',
-                    'c',
-                    'd'
+                    'N/A',
+                    'N/A',
+                    'N/A',
+                    'N/A'
                 ]).draw(true);
             });
         });
