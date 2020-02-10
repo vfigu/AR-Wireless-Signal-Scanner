@@ -7,7 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
     <title>AR Wireless Signal Scanner / Prototype</title>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
 
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
     <script async="" src="https://www.google-analytics.com/analytics.js"></script><script>
@@ -120,9 +121,9 @@
     <div id="output" class="output">
       <div id="content"></div>
       <div id="status"></div>
-      <pre id="log"></pre>
+<!--      <pre id="log"></pre>-->
     </div>
-    <div>
+    <div class="container-fluid">
         <table id="table-output" class="display nowrap" style="width:100%">
             <thead>
                 <tr>
@@ -243,6 +244,12 @@
       ga('send', 'pageview');
       /* jshint ignore:end */
     </script>
-  
+
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.2/axios.js"></script>
+    <script src="https://js.pusher.com/4.1/pusher.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.10.15/api/row().show().js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
