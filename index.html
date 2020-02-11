@@ -92,8 +92,8 @@
     <form>
       <label for="allAdvertisements">All BT Signals</label>
       <input id="allAdvertisements" type="checkbox">
+      <br/>
       <input id="name" type="text" size="20" placeholder="Device Name">
-      <input id="namePrefix" type="text" size="20" placeholder="Device Name Prefix">
       <button>Start Bluetooth Scan</button>
     </form>
 
@@ -165,11 +165,6 @@
       let filterName = document.querySelector('#name').value;
       if (filterName) {
         filters.push({name: filterName});
-      }
-
-      let filterNamePrefix = document.querySelector('#namePrefix').value;
-      if (filterNamePrefix) {
-        filters.push({namePrefix: filterNamePrefix});
       }
 
       let options = {};
