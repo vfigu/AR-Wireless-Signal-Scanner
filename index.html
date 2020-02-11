@@ -90,11 +90,22 @@
     flag enabled.</p>
 
     <form>
-      <label for="allAdvertisements">All BT Signals</label>
-      <input id="allAdvertisements" type="checkbox">
-      <input id="name" type="text" size="20" placeholder="Device Name">
-      <input id="namePrefix" type="text" size="20" placeholder="Name Prefix">
-      <button>Start Bluetooth Scan</button>
+      <fieldset id="scanner">
+        <legend>Scan For Bluetooth Signals</legend>
+        <div class="form-group">
+          <label for="name">Device Name</label>
+          <input type="text" class="form-control" id="name" placeholder="Enter Name" disabled>
+        </div>
+        <div class="form-group">
+          <label for="namePrefix">Device Name Prefix</label>
+          <input type="text" class="form-control" id="namePrefix" placeholder="Enter Name Prefix" disabled>
+        </div>
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" id="allAdvertisements" checked>
+          <label class="form-check-label" for="allAdvertisements">All Devices</label>
+        </div>
+        <button type="submit" class="btn btn-primary">Start Bluetooth Scan</button>
+        </fieldset>
     </form>
 
     <script>
@@ -243,6 +254,23 @@
       /* jshint ignore:end */
     </script>
 
+    <script>
+      // Wait for the page to finish loading
+      document.addEventListener('DOMContentLoaded', function () {
+        // Attach `change` event listener to checkbox
+        document.getElementById('allAdvertisements').onchange = toggleFilter;
+      }, false);
+
+      function toggleFilter() {
+        // Select the text fields
+        var filterItems = document.querySelectorAll('#scanner input[type="text"]');
+
+        // Toggle the text fields
+        for (var i = 0; i < filterItems.length; i++) {
+          filterItems[i].disabled = !filterItems[i].disabled;
+        }
+      }
+    </script>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.2/axios.js"></script>
     <script src="https://js.pusher.com/4.1/pusher.min.js"></script>
