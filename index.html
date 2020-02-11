@@ -31,11 +31,7 @@
   <div class="container-fluid">
     <h1>Bluetooth Scanner - Prototype</h1>
     <script>
-      SCAN_MODE = false;
-      DEVICE_ID = "-";
-      DEVICE_NAME = "-";
-      RSSI_VALUE = "-";
-      TIMESTAMP = "-";
+      OutputData = [{}];
 
       if('serviceWorker' in navigator) {
         navigator.serviceWorker.register('service-worker.js');
@@ -109,10 +105,10 @@
           <input type="checkbox" class="form-check-input" id="allAdvertisements" checked>
           <label class="form-check-label" for="allAdvertisements">All Devices</label>
         </div>
-        <button id="startButton" type="submit" class="btn btn-primary">Start Bluetooth Scan</button>
+        <button id="start-button" type="submit" class="btn btn-primary">Start Bluetooth Scan</button>
         </fieldset>
     </form>
-    <button id="stopButton" class="btn btn-danger" style="display: none;">Stop Scan</button>
+    <button id="stop-button" class="btn btn-danger" style="display: none;">Stop Scan</button>
 
     <script>
       ChromeSamples = {
@@ -122,6 +118,8 @@
           }).join(' ');
 
           document.querySelector('#log').textContent = line + '\n';
+          let obj = JSON.parse(JSON.stringify(line));
+          OutputData.push(obj);
         },
 
         clearLog: function() {
@@ -142,28 +140,29 @@
       };
     </script>
 
-    <h3>Live Output</h3>
+    <fieldset style="margin-top: 20px;">
+    <legend>Live Output</legend>
     <div id="output" class="output">
       <div id="content"></div>
       <div id="status"></div>
       <pre id="log"></pre>
 
-      <br/>
 
+      <button id="create-table" class="btn btn-warning" style="margin: 20px 0; float: right;">Create Table</button>
       <table id="table-output" class="display nowrap" style="width:100%">
         <thead>
-        <tr>
-          <th>Device ID</th>
-          <th>Name</th>
-          <th>RSSI</th>
-          <th>TimeStamp</th>
-        </tr>
+            <tr>
+              <th>Device ID</th>
+              <th>Name</th>
+              <th>RSSI</th>
+              <th>TimeStamp</th>
+            </tr>
         </thead>
         <tbody>
         </tbody>
       </table>
-      <button id="addRow">Add Data</button>
     </div>
+    </fieldset>
   </div>
 
     <script>
@@ -208,20 +207,20 @@
         log(' filters: ' + JSON.stringify(scan.filters));
 
         navigator.bluetooth.addEventListener('advertisementreceived', event => {
-            log('  "Device ID": "' + event.device.id +
-                '", "Device Name": ' + event.device.name +
-                '", "RSSI": "' + event.rssi +
-                '", "Time": "' + event.timeStamp);
+            log('{ "Device ID": "' + event.device.id +
+                '", "Device Name": "' + event.device.name +
+                '", "RSSI": ' + event.rssi +
+                ', "Time": ' + event.timeStamp + ' }');
         });
-        document.getElementById("stopButton").removeAttribute("style");
-        document.getElementById("startButton").removeAttribute("style");
-        document.getElementById("startButton").setAttribute("style", "display: none;");
+        document.getElementById("stop-button").removeAttribute("style");
+        document.getElementById("start-button").removeAttribute("style");
+        document.getElementById("start-button").setAttribute("style", "display: none;");
 
-        document.getElementById("stopButton").addEventListener('click',function () {
+        document.getElementById("stop-button").addEventListener('click',function () {
           stopScan();
-          document.getElementById("startButton").removeAttribute("style");
-          document.getElementById("stopButton").removeAttribute("style");
-          document.getElementById("stopButton").setAttribute("style", "display: none;");
+          document.getElementById("start-button").removeAttribute("style");
+          document.getElementById("stop-button").removeAttribute("style");
+          document.getElementById("stop-button").setAttribute("style", "display: none;");
         });
 
         //setTimeout(stopScan, 20000);

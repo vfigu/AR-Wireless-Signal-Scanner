@@ -1,7 +1,7 @@
 const app = {
     start() {
         $(document).ready(function () {
-            table = $('#table-output').DataTable({
+            let table = $('#table-output').DataTable({
                 dom: 'Bfrtip',
                 lengthMenu: [
                     [ 10, 25, 50, -1 ],
@@ -12,13 +12,17 @@ const app = {
                 ]
             });
 
-            $('#addRow').on( 'click', function () {
-                table.row.add([
-                    DEVICE_ID,
-                    DEVICE_NAME,
-                    RSSI_VALUE,
-                    TIMESTAMP
-                ]).draw(true);
+            $('#create-table').on( 'click', function () {
+                table.destroy();
+                table = $('#table-output').DataTable({
+                    data : OutputData,
+                    columns : [
+                        { "data" : "Device ID" },
+                        { "data" : "Device Name" },
+                        { "data" : "RSSI" },
+                        { "data" : "Time" },
+                    ]
+                });
             });
         });
     }
