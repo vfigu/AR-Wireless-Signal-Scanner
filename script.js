@@ -16,7 +16,7 @@ const app = {
                 table.destroy();
                 table = $('#table-output').DataTable({
                     data : OutputData,
-                    columns : [
+                    "columns" : [
                         { "data" : "Device ID" },
                         { "data" : "Device Name" },
                         { "data" : "RSSI" },

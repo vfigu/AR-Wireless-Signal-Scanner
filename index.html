@@ -109,6 +109,7 @@
         </fieldset>
     </form>
     <button id="stop-button" class="btn btn-danger" style="display: none;">Stop Scan</button>
+    <button id="display-button" class="btn btn-warning">Display Output</button>
 
     <script>
       ChromeSamples = {
@@ -138,6 +139,10 @@
           content.appendChild(newContent);
         }
       };
+
+      document.getElementById("display-button").addEventListener('click',function () {
+        document.querySelector('#log').textContent = JSON.stringify(OutputData);
+      });
     </script>
 
     <fieldset style="margin-top: 20px;">
