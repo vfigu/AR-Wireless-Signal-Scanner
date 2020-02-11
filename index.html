@@ -31,7 +31,14 @@
   <div class="container-fluid">
     <h1>Bluetooth Scanner - Prototype</h1>
     <script>
-      OutputData = [];
+      OutputData = [
+        {
+          "Device ID": "12345",
+          "Device Name": "Device",
+          "RSSI": -61,
+          "Time": 10
+        }
+      ];
 
       if('serviceWorker' in navigator) {
         navigator.serviceWorker.register('service-worker.js');
@@ -109,7 +116,6 @@
         </fieldset>
     </form>
     <button id="stop-button" class="btn btn-danger" style="display: none;">Stop Scan</button>
-    <button id="display-button" class="btn btn-warning">Display Output</button>
 
     <script>
       ChromeSamples = {
@@ -137,10 +143,6 @@
           content.appendChild(newContent);
         }
       };
-
-      document.getElementById("display-button").addEventListener('click',function () {
-        document.querySelector('#log').textContent = JSON.stringify(OutputData);
-      });
     </script>
 
     <fieldset style="margin-top: 20px;">
@@ -150,7 +152,7 @@
       <div id="status"></div>
       <pre id="log"></pre>
 
-
+      <button id="display-button" class="btn btn-warning" style="margin: 20px 0;">Display Output</button>
       <button id="create-table" class="btn btn-warning" style="margin: 20px 0; float: right;">Create Table</button>
       <table id="table-output" class="display nowrap" style="width:100%">
         <thead>
@@ -210,10 +212,10 @@
         log(' filters: ' + JSON.stringify(scan.filters));
 
         navigator.bluetooth.addEventListener('advertisementreceived', event => {
-            let result = '{ "Device ID": "' + event.device.id +
-                    '", "Device Name": "' + event.device.name +
-                    '", "RSSI": ' + event.rssi +
-                    ', "Time": ' + event.timeStamp + ' }'
+            let result = '{ \"Device ID\": \"' + event.device.id +
+                    '\", \"Device Name\": \"' + event.device.name +
+                    '\", \"RSSI\": ' + event.rssi +
+                    ', "Time": ' + event.timeStamp + ' }';
             log(result);
             OutputData.push(result);
         });
@@ -238,6 +240,10 @@
         log('Error: ' + error);
       }
     }
+
+    document.getElementById("display-button").addEventListener('click',function () {
+      document.querySelector('#log').textContent = JSON.stringify(OutputData);
+    });
     </script>
 
     <script>
