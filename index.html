@@ -6,7 +6,7 @@
     <meta name="description" content="Sample illustrating the use of Web Bluetooth / Scanning.">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Bluetooth Scanner - Prototype</title>
+    <title>Bluetooth Scanner Prototype</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css">
@@ -29,7 +29,7 @@
   <body>
 
   <div class="container-fluid">
-    <h1>Bluetooth Scanner - Prototype</h1>
+    <h1>Bluetooth Scanner Prototype</h1>
     <script>
       SCAN_MODE = false;
       DEVICE_ID = "-";
@@ -109,9 +109,10 @@
           <input type="checkbox" class="form-check-input" id="allAdvertisements" checked>
           <label class="form-check-label" for="allAdvertisements">All Devices</label>
         </div>
-        <button id="scanButton" type="submit" class="btn btn-primary">Start Bluetooth Scan</button>
+        <button id="startButton" type="submit" class="btn btn-primary">Start Bluetooth Scan</button>
         </fieldset>
     </form>
+    <button id="stopButton" class="btn btn-danger" style="display: none;">Stop Scan</button>
 
     <script>
       var ChromeSamples = {
@@ -176,7 +177,7 @@
     </script>
 
     <script>
-    async function onButtonClick() {
+    async function onButtonClick(token, force) {
       let filters = [];
 
       let filterName = document.querySelector('#name').value;
@@ -199,26 +200,28 @@
       try {
         const scan = await navigator.bluetooth.requestLEScan(options);
 
-        if(!SCAN_MODE)
-        {
-            log('Requesting Bluetooth Scan with options: ' + JSON.stringify(options));
-            log('Scan started with:');
-            log(' acceptAllAdvertisements: ' + scan.acceptAllAdvertisements);
-            log(' active: ' + scan.active);
-            log(' keepRepeatedDevices: ' + scan.keepRepeatedDevices);
-            log(' filters: ' + JSON.stringify(scan.filters));
+        log('Requesting Bluetooth Scan with options: ' + JSON.stringify(options));
+        log('Scan started with:');
+        log(' acceptAllAdvertisements: ' + scan.acceptAllAdvertisements);
+        log(' active: ' + scan.active);
+        log(' keepRepeatedDevices: ' + scan.keepRepeatedDevices);
+        log(' filters: ' + JSON.stringify(scan.filters));
 
-            navigator.bluetooth.addEventListener('advertisementreceived', event => {
-                log('  Device ID: ' + event.device.id +
-                    ', Device Name: ' + event.device.name +
-                    ', RSSI: ' + event.rssi + ', Time: ' + event.timeStamp);
-            });
-            SCAN_MODE = true;
-        }
-        else {
-            stopScan();
-            SCAN_MODE = false;
-        }
+        navigator.bluetooth.addEventListener('advertisementreceived', event => {
+            log('  Device ID: ' + event.device.id +
+                ', Device Name: ' + event.device.name +
+                ', RSSI: ' + event.rssi + ', Time: ' + event.timeStamp);
+        });
+        document.getElementById("stopButton").removeAttribute("style");
+        document.getElementById("startButton").removeAttribute("style");
+        document.getElementById("startButton").setAttribute("style", "display: none;");
+
+        document.getElementById("stopButton").addEventListener('click',function () {
+          stopScan();
+          document.getElementById("startButton").removeAttribute("style");
+          document.getElementById("stopButton").removeAttribute("style");
+          document.getElementById("stopButton").setAttribute("style", "display: none;");
+        });
 
         //setTimeout(stopScan, 20000);
         function stopScan() {
