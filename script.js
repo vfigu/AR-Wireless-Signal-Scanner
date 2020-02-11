@@ -12,7 +12,7 @@ const app = {
                 ]
             });
 
-            $('#create-table').on( 'click', function () {
+            function createTable(){
                 table.destroy();
                 table = $('#table-output').DataTable({
                     data : OutputData,
@@ -23,6 +23,13 @@ const app = {
                         { "data" : "Time" },
                     ]
                 });
+            }
+            $('#stop-button').on( 'click', function () {
+                createTable();
+            });
+            $('#destroy-table').on( 'click', function () {
+                OutputData = [];
+                createTable();
             });
         });
     }
