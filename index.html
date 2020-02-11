@@ -29,7 +29,7 @@
   <body>
 
   <div class="container-fluid">
-    <h1>Bluetooth Scanner Prototype</h1>
+    <h1>Bluetooth Scanner - Prototype</h1>
     <script>
       DEVICE_ID = "-";
       DEVICE_NAME = "-";
@@ -167,9 +167,9 @@
         filters.push({name: filterName});
       }
 
-      let filterDeviceID = document.querySelector('#deviceID').value;
-      if (filterDeviceID) {
-        filters.push({deviceID: filterDeviceID});
+      let filterNamePrefix = document.querySelector('#namePrefix').value;
+      if (filterNamePrefix) {
+        filters.push({namePrefix: filterNamePrefix});
       }
 
       let options = {};
