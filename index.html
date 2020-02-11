@@ -31,7 +31,7 @@
   <div class="container-fluid">
     <h1>Bluetooth Scanner - Prototype</h1>
     <script>
-      OutputData = [{}];
+      OutputData = [];
 
       if('serviceWorker' in navigator) {
         navigator.serviceWorker.register('service-worker.js');
@@ -119,8 +119,6 @@
           }).join(' ');
 
           document.querySelector('#log').textContent = line + '\n';
-          let obj = JSON.parse(JSON.stringify(line));
-          OutputData.push(obj);
         },
 
         clearLog: function() {
@@ -212,10 +210,12 @@
         log(' filters: ' + JSON.stringify(scan.filters));
 
         navigator.bluetooth.addEventListener('advertisementreceived', event => {
-            log('{ "Device ID": "' + event.device.id +
-                '", "Device Name": "' + event.device.name +
-                '", "RSSI": ' + event.rssi +
-                ', "Time": ' + event.timeStamp + ' }');
+            let result = '{ "Device ID": "' + event.device.id +
+                    '", "Device Name": "' + event.device.name +
+                    '", "RSSI": ' + event.rssi +
+                    ', "Time": ' + event.timeStamp + ' }'
+            log(result);
+            OutputData.push(result);
         });
         document.getElementById("stop-button").removeAttribute("style");
         document.getElementById("start-button").removeAttribute("style");
