@@ -6,7 +6,7 @@
     <meta name="description" content="Sample illustrating the use of Web Bluetooth / Scanning.">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Bluetooth Scanner - Prototype</title>
+    <title>Bluetooth Scanner Prototype</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css">
@@ -92,8 +92,8 @@
     <form>
       <label for="allAdvertisements">All BT Signals</label>
       <input id="allAdvertisements" type="checkbox">
-      <br/>
       <input id="name" type="text" size="20" placeholder="Device Name">
+      <input id="namePrefix" type="text" size="20" placeholder="Name Prefix">
       <button>Start Bluetooth Scan</button>
     </form>
 
@@ -165,6 +165,11 @@
       let filterName = document.querySelector('#name').value;
       if (filterName) {
         filters.push({name: filterName});
+      }
+
+      let filterNamePrefix = document.querySelector('#namePrefix').value;
+      if (filterNamePrefix) {
+        filters.push({namePrefix: filterNamePrefix});
       }
 
       let options = {};
