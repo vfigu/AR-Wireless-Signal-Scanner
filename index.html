@@ -29,7 +29,7 @@
   <body>
 
   <div class="container-fluid">
-    <h1>Bluetooth Scanner - Prototype</h1>
+    <h1>Bluetooth Scanner Prototype</h1>
     <script>
       DEVICE_ID = "-";
       DEVICE_NAME = "-";
@@ -190,19 +190,9 @@
         log(' filters: ' + JSON.stringify(scan.filters));
 
         navigator.bluetooth.addEventListener('advertisementreceived', event => {
-          log('  Device ID: ' + event.device.id);
-          log('  Device Name: ' + event.device.name);
-          log('  RSSI: ' + event.rssi);
-          log('  Time: ' + event.timeStamp);
-
-          DEVICE_ID = event.device.id;
-          DEVICE_NAME = event.device.name;
-          RSSI_VALUE = event.rssi;
-          TIMESTAMP = event.timeStamp;
-
-          $(document).ready(function () {
-            $('#addRow').click();
-          })
+          log('  Device ID: ' + event.device.id +
+              ', Device Name: ' + event.device.name +
+              ', RSSI: ' + event.rssi + ', Time: ' + event.timeStamp);
         });
 
         setTimeout(stopScan, 20000);
