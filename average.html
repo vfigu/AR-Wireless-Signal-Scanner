@@ -245,16 +245,17 @@
           document.getElementById("stop-button").removeAttribute("style");
           document.getElementById("stop-button").setAttribute("style", "display: none;");
 
-          let length = PassData.length-1;
+          let length = PassData.length;
           if(length > 0){
-            let ReturnData = PassData[length];
+            let ReturnData = PassData[length-1];
             log("entered = " + JSON.stringify(PassData));
 
-            const reducer = (accumulator, currentValue) => accumulator.RSSI + parseInt(currentValue.RSSI);
-            let sum = PassData.reduce(reducer);
-            let avg = sum / PassData.length;
+            let sum = 0;
+            for(let i = 0; i < length; i++){
+              sum += parseInt(PassData[i].RSSI);
+            }
+            let avg = sum / length;
             ReturnData.RSSI = JSON.stringify(avg);
-            log("output = " + JSON.stringify(ReturnData));
             PassData = [];
 
             OutputData.push(ReturnData);
