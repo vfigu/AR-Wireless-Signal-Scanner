@@ -14,6 +14,10 @@ const app = {
                     buttons: [
                         'pageLength', 'copy', 'csv', 'excel', 'pdf', 'print'
                     ],
+                    rowReorder: {
+                        selector: 'td:nth-child(2)'
+                    },
+                    responsive: true,
                     data : OutputData,
                     "columns" : [
                         { "data" : "Device ID" },
@@ -24,9 +28,9 @@ const app = {
                     "deferRender": true
                 });
             }
-            $('#stop-button').on( 'click', function () {
-                createTable();
-            });
+            // $('#stop-button').on( 'click', function () {
+            //     createTable();
+            // });
             $('#create-table').on( 'click', function () {
                 createTable();
             });
