@@ -23,9 +23,9 @@ const app = {
                     ]
                 });
             }
-            // $('#stop-button').on( 'click', function () {
-            //     createTable();
-            // });
+            $('#stop-button').on( 'click', function () {
+                createTable();
+            });
             $('#create-table').on( 'click', function () {
                 createTable();
             });
