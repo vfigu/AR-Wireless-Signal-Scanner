@@ -20,7 +20,8 @@ const app = {
                         { "data" : "Device Name" },
                         { "data" : "RSSI" },
                         { "data" : "Time" },
-                    ]
+                    ],
+                    "deferRender": true
                 });
             }
             $('#stop-button').on( 'click', function () {

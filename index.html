@@ -28,10 +28,11 @@
   <body>
 
   <div class="container-fluid">
-    <h1>Bluetooth Scanner | Continuous 1.0</h1>
+    <h1>Bluetooth Scanner | Continuous 1.1</h1>
     <a href="horizontal.html" class="btn btn-info" style="margin-bottom: 20px;">Left to Right</a>
     <a href="average.html" class="btn btn-success" style="margin-bottom: 20px;">Average</a>
     <script>
+      ScannerEnabled = false;
       OutputData = [];
       // OutputData = [
       // {
@@ -220,12 +221,14 @@
         log(' filters: ' + JSON.stringify(scan.filters));
 
         navigator.bluetooth.addEventListener('advertisementreceived', event => {
-          let result = '{ "Device ID": "' + event.device.id +
+          if(ScannerEnabled) {
+            let result = '{ "Device ID": "' + event.device.id +
                     '", "Device Name": "' + event.device.name +
                     '", "RSSI": ' + event.rssi +
                     ', "Time": ' + event.timeStamp + ' }';
-          log(result);
-          OutputData.push(JSON.parse(result));
+            log(result);
+            OutputData.push(JSON.parse(result));
+          }
         });
         document.getElementById("stop-button").removeAttribute("style");
         document.getElementById("start-button").removeAttribute("style");
@@ -241,7 +244,8 @@
         //setTimeout(stopScan, 20000);
         function stopScan() {
           log('Stopping scan...');
-          scan.stop();
+          ScannerEnabled = false;
+          // scan.stop();
           log('Stopped.  scan.active = ' + scan.active);
         }
       } catch(error)  {
@@ -260,6 +264,7 @@
         event.preventDefault();
 
         if (isWebBluetoothEnabled()) {
+          ScannerEnabled = true;
           ChromeSamples.clearLog();
           onButtonClick();
         }
