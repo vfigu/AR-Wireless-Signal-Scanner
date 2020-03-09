@@ -29,27 +29,28 @@
   <body>
 
   <div class="container-fluid">
-    <h1>Bluetooth Scanner | Average Points 1.6</h1>
+    <h1>Bluetooth Scanner | Average Points 1.7</h1>
     <a href="index.html" class="btn btn-warning" style="margin-bottom: 20px;">Continuous</a>
     <a href="horizontal.html" class="btn btn-info" style="margin-bottom: 20px;">Left To Right</a>
+    <a href="point.html" class="btn btn-danger" style="margin-bottom: 20px;">Single Point</a>
     <script>
       ScannerEnabled = false;
       OutputData = [];
       PassData = [];
-      PassData = [
-      {
-        "Device ID": "12345",
-        "Device Name": "Device",
-        "RSSI": -61,
-        "Time": 10
-      },
-        {
-          "Device ID": "12345",
-          "Device Name": "Device",
-          "RSSI": -63,
-          "Time": 12
-        }
-        ];
+      // PassData = [
+      // {
+      //   "Device ID": "12345",
+      //   "Device Name": "Device",
+      //   "RSSI": -61,
+      //   "Time": 10
+      // },
+      //   {
+      //     "Device ID": "12345",
+      //     "Device Name": "Device",
+      //     "RSSI": -63,
+      //     "Time": 12
+      //   }
+      //   ];
 
       if('serviceWorker' in navigator) {
         navigator.serviceWorker.register('service-worker.js');
@@ -236,7 +237,7 @@
                     '", "RSSI": ' + event.rssi +
                     ', "Time": ' + event.timeStamp + ' }';
             log(result);
-            PassData.push(JSON.parse(result));
+            PassData.push(result);
           }
         });
         document.getElementById("stop-button").removeAttribute("style");
@@ -397,12 +398,12 @@
 
               let length = PassData.length;
               if (length > 0) {
-                let ReturnData = PassData[length - 1];
-                log("entered = " + JSON.stringify(PassData));
+                let ReturnData = JSON.parse(PassData[length - 1]);
+                log("sample size = " + length);
 
                 let sum = 0;
                 for (let i = 0; i < length; i++) {
-                  sum += parseInt(PassData[i].RSSI);
+                  sum += parseInt(JSON.parse(PassData[i]).RSSI);
                 }
                 let avg = sum / length;
                 ReturnData.RSSI = JSON.stringify(avg);
