@@ -32,6 +32,7 @@
     <a href="index.html" class="btn btn-warning" style="margin-bottom: 20px;">Continuous</a>
     <a href="horizontal.html" class="btn btn-info" style="margin-bottom: 20px;">Left To Right</a>
     <script>
+      ScannerEnabled = false;
       OutputData = [];
       PassData = [];
       // PassData = [
@@ -233,14 +234,15 @@
                     '", "RSSI": ' + event.rssi +
                     ', "Time": ' + event.timeStamp + ' }';
           log(result);
-          PassData.push(JSON.parse(result));
+          if(ScannerEnabled) PassData.push(JSON.parse(result));
         });
         document.getElementById("stop-button").removeAttribute("style");
         document.getElementById("start-button").removeAttribute("style");
         document.getElementById("start-button").setAttribute("style", "display: none;");
 
         document.getElementById("stop-button").addEventListener('click',function () {
-          stopScan();
+          ScannerEnabled = false;
+          // stopScan();
           document.getElementById("start-button").removeAttribute("style");
           document.getElementById("stop-button").removeAttribute("style");
           document.getElementById("stop-button").setAttribute("style", "display: none;");
@@ -262,12 +264,12 @@
           }
         });
 
-        setTimeout(stopScan, 20000);
-        function stopScan() {
-          log('Stopping scan...');
-          scan.stop();
-          log('Stopped.  scan.active = ' + scan.active);
-        }
+        // setTimeout(stopScan, 20000);
+        // function stopScan() {
+        //   log('Stopping scan...');
+        //   scan.stop();
+        //   log('Stopped.  scan.active = ' + scan.active);
+        // }
       } catch(error)  {
         log('Error: ' + error);
       }
@@ -284,6 +286,7 @@
         event.preventDefault();
 
         if (isWebBluetoothEnabled()) {
+          ScannerEnabled = true;
           ChromeSamples.clearLog();
           onButtonClick();
         }
