@@ -28,7 +28,7 @@
   <body>
 
   <div class="container-fluid">
-    <h1>Bluetooth Scanner | Left To Right 1.6</h1>
+    <h1>Bluetooth Scanner | Left To Right 1.7</h1>
     <a href="index.html" class="btn btn-warning" style="margin-bottom: 20px;">Continuous</a>
     <a href="point.html" class="btn btn-danger" style="margin-bottom: 20px;">Single Point</a>
     <a href="average.html" class="btn btn-success" style="margin-bottom: 20px;">Average</a>
@@ -136,6 +136,7 @@
         <button id="start-button" type="submit" class="btn btn-primary">Start Bluetooth Scan</button>
       </fieldset>
     </form>
+    <button id="continue-button" class="btn btn-primary" style="display: none;">Continue Scan</button>
     <button id="stop-button" class="btn btn-danger" style="display: none;">Stop Scan</button>
 
     <script>
@@ -248,8 +249,8 @@
         });
         document.getElementById("stop-button").removeAttribute("style");
         document.getElementById("start-button").removeAttribute("style");
-        document.getElementById("start-button").removeAttribute("type");
         document.getElementById("start-button").setAttribute("style", "display: none;");
+        document.getElementById("continue-button").setAttribute("style", "display: none;");
 
         // setTimeout(stopScan, 20000);
         // function stopScan() {
@@ -264,6 +265,11 @@
 
     document.getElementById("display-button").addEventListener('click',function () {
       document.querySelector('#log').textContent = JSON.stringify(OutputData);
+    });
+    document.getElementById("continue-button").addEventListener('click',function () {
+      ScannerEnabled = true;
+      document.getElementById("stop-button").removeAttribute("style");
+      document.getElementById("continue-button").setAttribute("style", "display: none;");
     });
   </script>
 
@@ -377,7 +383,7 @@
           $('#stop-button').on('click', function () {
             ScannerEnabled = false;
             // stopScan();
-            document.getElementById("start-button").removeAttribute("style");
+            document.getElementById("continue-button").removeAttribute("style");
             document.getElementById("stop-button").removeAttribute("style");
             document.getElementById("stop-button").setAttribute("style", "display: none;");
 
