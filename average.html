@@ -29,7 +29,7 @@
   <body>
 
   <div class="container-fluid">
-    <h1>Bluetooth Scanner | Average Points 1.11</h1>
+    <h1>Bluetooth Scanner | Average Points 1.12</h1>
     <a href="index.html" class="btn btn-warning" style="margin-bottom: 20px;">Continuous</a>
     <a href="horizontal.html" class="btn btn-info" style="margin-bottom: 20px;">Left To Right</a>
     <a href="point.html" class="btn btn-danger" style="margin-bottom: 20px;">Single Point</a>
@@ -37,6 +37,7 @@
       ScannerEnabled = false;
       OutputData = [];
       PassData = [];
+      UniqueID = 1;
       // PassData = [
       // {
       //   "Device ID": "12345",
@@ -178,9 +179,10 @@
       <table id="table-output" class="display nowrap" style="width:100%">
         <thead>
             <tr>
+              <th>ID</th>
+              <th>RSSI</th>
               <th>Device ID</th>
               <th>Name</th>
-              <th>RSSI</th>
               <th>TimeStamp</th>
             </tr>
         </thead>
@@ -234,10 +236,12 @@
 
         navigator.bluetooth.addEventListener('advertisementreceived', event => {
           if(ScannerEnabled){
-            let result = '{ "Device ID": "' + event.device.id +
+            let result =
+                    '{ "ID": ' + 0 +
+                    ', "RSSI": ' + event.rssi +
+                    ', "Device ID": "' + event.device.id +
                     '", "Device Name": "' + event.device.name +
-                    '", "RSSI": ' + event.rssi +
-                    ', "Time": ' + event.timeStamp + ' }';
+                    '", "Time": ' + event.timeStamp + ' }';
             log(result);
             PassData.push(result);
           }
@@ -388,9 +392,10 @@
                 responsive: true,
                 data: OutputData,
                 "columns": [
+                  {"data": "ID"},
+                  {"data": "RSSI"},
                   {"data": "Device ID"},
                   {"data": "Device Name"},
-                  {"data": "RSSI"},
                   {"data": "Time"},
                 ],
                 "deferRender": true
@@ -415,9 +420,11 @@
                 }
                 let avg = sum / length;
                 ReturnData.RSSI = JSON.stringify(avg);
+                ReturnData.ID = UniqueID;
                 PassData = [];
 
                 OutputData.push(ReturnData);
+                UniqueID++;
                 createTable();
               }
             });

@@ -28,7 +28,7 @@
   <body>
 
   <div class="container-fluid">
-    <h1>Bluetooth Scanner | Continuous 1.6</h1>
+    <h1>Bluetooth Scanner | Continuous 1.7</h1>
     <a href="horizontal.html" class="btn btn-info" style="margin-bottom: 20px;">Left to Right</a>
     <a href="point.html" class="btn btn-danger" style="margin-bottom: 20px;">Single Point</a>
     <a href="average.html" class="btn btn-success" style="margin-bottom: 20px;">Average</a>
@@ -36,6 +36,7 @@
       ScannerEnabled = false;
       OutputData = [];
       PassData = [];
+      UniqueID = 1;
       // OutputData = [
       // {
       //   "Device ID": "12345",
@@ -170,9 +171,10 @@
       <table id="table-output" class="display nowrap" style="width:100%">
         <thead>
             <tr>
+              <th>ID</th>
+              <th>RSSI</th>
               <th>Device ID</th>
               <th>Name</th>
-              <th>RSSI</th>
               <th>TimeStamp</th>
             </tr>
         </thead>
@@ -226,10 +228,12 @@
 
         navigator.bluetooth.addEventListener('advertisementreceived', event => {
           if(ScannerEnabled) {
-            let result = '{ "Device ID": "' + event.device.id +
+            let result =
+                    '{ "ID": ' + 0 +
+                    ', "RSSI": ' + event.rssi +
+                    ',  Device ID": "' + event.device.id +
                     '", "Device Name": "' + event.device.name +
-                    '", "RSSI": ' + event.rssi +
-                    ', "Time": ' + event.timeStamp + ' }';
+                    '", "Time": ' + event.timeStamp + ' }';
             log(result);
             PassData.push(result);
           }
@@ -362,9 +366,10 @@
                 responsive: true,
                 data: OutputData,
                 "columns": [
+                  {"data": "ID"},
+                  {"data": "RSSI"},
                   {"data": "Device ID"},
                   {"data": "Device Name"},
-                  {"data": "RSSI"},
                   {"data": "Time"},
                 ],
                 "deferRender": true
@@ -379,9 +384,13 @@
               document.getElementById("stop-button").setAttribute("style", "display: none;");
 
               let length = PassData.length;
+              let parsed;
               if (length > 0) {
                 for (let i = 0; i < length; i++) {
-                  OutputData.push(JSON.parse(PassData[i]));
+                  parsed = JSON.parse(PassData[i]);
+                  parsed.ID = UniqueID;
+                  OutputData.push(parsed);
+                  UniqueID++;
                 }
                 PassData = [];
                 createTable();
