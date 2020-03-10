@@ -30,7 +30,7 @@
 <body>
 
 <div class="container-fluid">
-  <h1>Bluetooth Scanner | Left To Right 2.2</h1>
+  <h1>Bluetooth Scanner | Left To Right 2.4</h1>
   <a href="../index.html" class="btn light" style="margin-bottom: 20px;">Home</a>
   <script>
     ScannerEnabled = false;
@@ -38,6 +38,32 @@
     UniqueID = 1;
     OutputData = [];
     PassData = [];
+    // OutputData = [
+    //     {
+    //         "Row": 1,
+    //         "ID": 1,
+    //         "RSSI": -30,
+    //         "Device ID": "10ht1",
+    //         "Device Name": "device",
+    //         "Time": 10
+    //     },
+    //     {
+    //         "Row": 1,
+    //         "ID": 2,
+    //         "RSSI": -32,
+    //         "Device ID": "10ht1",
+    //         "Device Name": "device",
+    //         "Time": 10
+    //     },
+    //     {
+    //         "Row": 2,
+    //         "ID": 1,
+    //         "RSSI": -52,
+    //         "Device ID": "10ht1",
+    //         "Device Name": "device",
+    //         "Time": 10
+    //     },
+    // ];
 
     if('serviceWorker' in navigator) {
       navigator.serviceWorker.register('service-worker.js');
@@ -329,7 +355,6 @@
 <script src="https://code.highcharts.com/modules/boost-canvas.js"></script>
 <script src="https://code.highcharts.com/modules/boost.js"></script>
 <script src="https://code.highcharts.com/modules/accessibility.js"></script>
-
 <div id="highcharts-graph" style="display: none;">
   <figure class="highcharts-figure">
     <div id="container"></div>
@@ -424,34 +449,118 @@
             createTable();
           }
           Row++;
+
+          let csv = document.getElementById("csv");
+          length = OutputData.length;
+
+          let createdHTML = "Row,ID,RSSI\n";
+          if (length > 0) {
+              for (let i = 0; i < length; i++) {
+                  parsed = OutputData[i];
+                  createdHTML += parsed.Row + ',' + parsed.ID + ',' + parsed.RSSI + '\n';
+              }
+              csv.innerHTML = createdHTML;
+          }
         });
         $('#create-table').on('click', function () {
           createTable();
-        });
-        $('#create-graph').on('click', function () {
-          document.getElementById("highcharts-graph").removeAttribute("style");
-          let csv = document.getElementById("csv");
-
-          let length = OutputData.length;
-          let parsed;
-          let createdHTML = "Row,ID,RSSI\n";
-          if (length > 0) {
-            for (let i = 0; i < length; i++) {
-              parsed = JSON.parse(OutputData[i]);
-              createdHTML += parsed.Row + ',' + parsed.ID + ',' + parsed.RSSI + '\n';
-            }
-            csv.innerHTML = createdHTML;
-          }
         });
         $('#destroy-table').on('click', function () {
           OutputData = [];
           createTable();
         });
+        $('#create-graph').on('click', function () {
+            document.getElementById("highcharts-graph").removeAttribute("style");
+            document.getElementById("highcharts-graph").removeAttribute("style");
+            let chart = Highcharts.chart('container', {
+              data: {
+                  csv: document.getElementById('csv').innerHTML
+              },
+
+              chart: {
+                  type: 'heatmap',
+                  inverted: true
+              },
+
+              boost: {
+                  useGPUTranslations: true
+              },
+
+              title: {
+                  text: 'Bluetooth Signal Strength Heat Map',
+                  align: 'left',
+                  x: 40
+              },
+
+              subtitle: {
+                  text: 'Mnual Scanning Left -> Right, Right -> Left',
+                  align: 'left',
+                  x: 40
+              },
+
+              xAxis: {
+                  title: {
+                      text: null
+                  },
+                  labels: {
+                      format: '{value}'
+                  },
+                  minPadding: 0,
+                  maxPadding: 0,
+                  startOnTick: false,
+                  endOnTick: false,
+                  tickWidth: 1,
+                  min: 1,
+                  reversed: true
+              },
+
+              yAxis: {
+                  title: {
+                      text: null
+                  },
+                  labels: {
+                      format: '{value}'
+                  },
+                  minPadding: 0,
+                  maxPadding: 0,
+                  startOnTick: false,
+                  endOnTick: false,
+                  tickWidth: 1,
+                  min: 1,
+                  reversed: false
+              },
+
+              colorAxis: {
+                  stops: [
+                      [0, '#3060cf'],
+                      [0.5, '#fffbbc'],
+                      [0.9, '#c4463a'],
+                      [1, '#c4463a']
+                  ],
+                  startOnTick: false,
+                  endOnTick: false,
+                  labels: {
+                      format: '{value}dB'
+                  }
+              },
+
+              series: [{
+                  boostThreshold: 100,
+                  borderWidth: 0,
+                  nullColor: '#EFEFEF',
+                  colsize: 1,
+                  tooltip: {
+                      headerFormat: 'Signal Strength<br/>',
+                      pointFormat: '{point.x} {point.y}: <b>{point.value}</b>'
+                  },
+                  turboThreshold: Number.MAX_VALUE // #3404, remove after 4.0.5 release
+              }]
+          });
+        });
       });
     }};
   $(document).ready(() => app.start());
 </script>
-<script src="../js/highcharts.js"></script>
 
 </body>
 </html>

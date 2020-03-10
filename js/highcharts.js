@@ -1,4 +1,4 @@
-Highcharts.chart('container', {
+let chart = Highcharts.chart('container', {
 
     data: {
         csv: document.getElementById('csv').innerHTML
