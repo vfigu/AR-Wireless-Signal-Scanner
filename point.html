@@ -29,7 +29,7 @@
 <body>
 
 <div class="container-fluid">
-    <h1>Bluetooth Scanner | Single Points 1.5</h1>
+    <h1>Bluetooth Scanner | Single Points 1.6</h1>
     <a href="index.html" class="btn btn-warning" style="margin-bottom: 20px;">Continuous</a>
     <a href="horizontal.html" class="btn btn-info" style="margin-bottom: 20px;">Left To Right</a>
     <a href="average.html" class="btn btn-success" style="margin-bottom: 20px;">Average</a>
@@ -169,9 +169,10 @@
             <table id="table-output" class="display nowrap" style="width:100%">
                 <thead>
                 <tr>
+                    <th>ID</th>
+                    <th>RSSI</th>
                     <th>Device ID</th>
                     <th>Name</th>
-                    <th>RSSI</th>
                     <th>TimeStamp</th>
                 </tr>
                 </thead>
@@ -239,6 +240,30 @@
             document.getElementById("start-button").removeAttribute("style");
             document.getElementById("start-button").setAttribute("style", "display: none;");
             document.getElementById("pop-button").setAttribute("style", "float: right;");
+
+            // document.getElementById("stop-button").addEventListener('click',function () {
+            //   ScannerEnabled = false;
+            //   // stopScan();
+            //   document.getElementById("start-button").removeAttribute("style");
+            //   document.getElementById("stop-button").removeAttribute("style");
+            //   document.getElementById("stop-button").setAttribute("style", "display: none;");
+            //
+            //   let length = PassData.length;
+            //   if(length > 0){
+            //     let ReturnData = PassData[length-1];
+            //     log("entered = " + JSON.stringify(PassData));
+            //
+            //     let sum = 0;
+            //     for(let i = 0; i < length; i++){
+            //       sum += parseInt(PassData[i].RSSI);
+            //     }
+            //     let avg = sum / length;
+            //     ReturnData.RSSI = JSON.stringify(avg);
+            //     PassData = [];
+            //
+            //     OutputData.push(ReturnData);
+            //   }
+            // });
 
             // setTimeout(stopScan, 20000);
             // function stopScan() {
@@ -362,6 +387,31 @@
                         "deferRender": true
                     });
                 }
+
+                // $('#stop-button').on('click', function () {
+                //     ScannerEnabled = false;
+                //     // stopScan();
+                //     document.getElementById("start-button").removeAttribute("style");
+                //     document.getElementById("stop-button").removeAttribute("style");
+                //     document.getElementById("stop-button").setAttribute("style", "display: none;");
+                //
+                //     let length = PassData.length;
+                //     if (length > 0) {
+                //         let ReturnData = PassData[length - 1];
+                //         log("entered = " + JSON.stringify(PassData));
+                //
+                //         let sum = 0;
+                //         for (let i = 0; i < length; i++) {
+                //             sum += parseInt(PassData[i].RSSI);
+                //         }
+                //         let avg = sum / length;
+                //         ReturnData.RSSI = JSON.stringify(avg);
+                //         PassData = [];
+                //
+                //         OutputData.push(ReturnData);
+                //         createTable();
+                //     }
+                // });
                 $('#stop-button').on('click', function () {
                     let length = PassData.length;
                     let parsed;
@@ -369,8 +419,8 @@
                         parsed = JSON.parse(PassData);
                         parsed.ID = UniqueID;
                         OutputData.push(parsed);
-                        createTable();
                         UniqueID++;
+                        createTable();
                     }
                 });
                 $('#create-table').on('click', function () {
