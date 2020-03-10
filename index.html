@@ -28,13 +28,14 @@
   <body>
 
   <div class="container-fluid">
-    <h1>Bluetooth Scanner | Continuous 1.3</h1>
+    <h1>Bluetooth Scanner | Continuous 1.4</h1>
     <a href="horizontal.html" class="btn btn-info" style="margin-bottom: 20px;">Left to Right</a>
     <a href="point.html" class="btn btn-danger" style="margin-bottom: 20px;">Single Point</a>
     <a href="average.html" class="btn btn-success" style="margin-bottom: 20px;">Average</a>
     <script>
       ScannerEnabled = false;
       OutputData = [];
+      PassData = [];
       // OutputData = [
       // {
       //   "Device ID": "12345",
@@ -229,7 +230,7 @@
                     '", "RSSI": ' + event.rssi +
                     ', "Time": ' + event.timeStamp + ' }';
             log(result);
-            OutputData.push(JSON.parse(result));
+            PassData.push(result);
           }
         });
         document.getElementById("stop-button").removeAttribute("style");
@@ -338,6 +339,7 @@
             let table = $('#table-output').DataTable({});
 
             function createTable() {
+              table.clear();
               table.destroy();
               table = $('#table-output').DataTable({
                 dom: 'Bfrtip',
@@ -354,7 +356,6 @@
                 responsive: true,
                 data: OutputData,
                 "columns": [
-                  {"data": "Side"},
                   {"data": "Device ID"},
                   {"data": "Device Name"},
                   {"data": "RSSI"},
@@ -373,19 +374,12 @@
 
               let length = PassData.length;
               if (length > 0) {
-                if(Side%2 === 1){
-                  for (let i = 0; i < length; i++) {
-                    OutputData.push(JSON.parse(PassData[i]));
-                  }
+                for (let i = 0; i < length; i++) {
+                  OutputData.push(JSON.parse(PassData[i]));
                 }
-                else{
-                  for (let i = length-1; i >= 0; i--) {
-                    OutputData.push(JSON.parse(PassData[i]));
-                  }
-                }
+                PassData = [];
                 createTable();
               }
-              Side++;
             });
             $('#create-table').on('click', function () {
               createTable();
@@ -398,5 +392,5 @@
         }};
       $(document).ready(() => app.start());
     </script>
-</body>
+  </body>
 </html>
