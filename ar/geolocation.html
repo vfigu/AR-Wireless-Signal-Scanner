@@ -27,9 +27,9 @@
   <body>
 
   <div class="container-fluid">
-    <h1>Bluetooth Scanner | Rotation 1.1</h1>
+    <h1>Bluetooth Scanner | Geolocation 1.0</h1>
     <a href="../index.html" class="btn light" style="margin-bottom: 20px;">Home</a>
-    <a href="../ar/geolocation.html" class="btn btn-info" style="margin-bottom: 20px;">Augmented</a>
+    <a href="../ar/rotation.html" class="btn btn-warning" style="margin-bottom: 20px;">Augmented</a>
     <script>
       ScannerEnabled = false;
       OutputData = [];
@@ -218,9 +218,6 @@
         options.filters = filters;
       }
 
-      let gyroscope = new Gyroscope({frequency: 300});
-      gyroscope.start();
-
       try {
         log('Requesting Bluetooth Scan with options: ' + JSON.stringify(options));
         const scan = await navigator.bluetooth.requestLEScan(options);
@@ -233,12 +230,13 @@
 
         navigator.bluetooth.addEventListener('advertisementreceived', event => {
           if(ScannerEnabled) {
+            let geolocation = navigator.geolocation.getCurrentPosition(successCallback);
             let result =
                     '{ "ID": ' + 0 +
                     ', "RSSI": ' + event.rssi +
-                    ', "X": ' + gyroscope.x +
-                    ', "Y": ' + gyroscope.y +
-                    ', "Z": ' + gyroscope.z +
+                    ', "X": ' + geolocation.coords.longitude +
+                    ', "Y": ' + geolocation.coords.latitude +
+                    ', "Z": ' + geolocation.coords.altitude +
                     ', "Device ID": "' + event.device.id +
                     '", "Device Name": "' + event.device.name +
                     '", "Time": ' + event.timeStamp + ' }';
@@ -267,6 +265,36 @@
       } catch(error)  {
         log('Error: ' + error);
       }
+    }
+
+    function successCallback(position) {
+      // By setting the 'maximumAge' to Infinity, the position
+      // object is guaranteed to be a cached one.
+      // By using a 'timeout' of 0 milliseconds, if there is
+      // no cached position available at all, the user agent
+      // will immediately invoke the error callback with code
+      // TIMEOUT and will not initiate a new position
+      // acquisition process.
+      if (position.timestamp < freshness_threshold &&
+              position.coords.accuracy < accuracy_threshold) {
+        // The position is relatively fresh and accurate.
+      } else {
+        // The position is quite old and/or inaccurate.
+      }
+    }
+
+    function errorCallback(error) {
+      if(error.TIMEOUT) {
+        // Quick fallback when no cached position exists at all.
+        doFallback();
+        // Acquire a new position object.
+        navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+      }
+    }
+
+    function doFallback() {
+      // No cached position available at all.
+      // Fallback to a default position.
     }
 
     document.getElementById("display-button").addEventListener('click',function () {
