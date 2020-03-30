@@ -191,9 +191,6 @@
     document.getElementById("continue-button").setAttribute("style", "display: none;");
   });
   document.getElementById("download-button").addEventListener('click',function () {
-    // Building the CSV from the Data two-dimensional array
-// Each column is separated by ";" and new line "\n" for next row
-
     function convertToCSV(objArray) {
       var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
       var str = '';
@@ -201,7 +198,7 @@
       for (var i = 0; i < array.length; i++) {
         var line = '';
         for (var index in array[i]) {
-          if (line != '') line += ','
+          if (line !== '') line += ',';
 
           line += array[i][index];
         }
