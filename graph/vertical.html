@@ -30,10 +30,9 @@
 <body>
 
 <div class="container-fluid">
-  <h1>Bluetooth Scanner | Left To Right 2.5</h1>
+  <h1>Bluetooth Scanner | Bottom Upwards 1.0</h1>
   <a href="../index.html" class="btn light" style="margin-bottom: 20px;">Home</a>
-  <a href="vertical.html" class="btn btn-warning" style="margin-bottom: 20px;">Bottom Upwards</a>
-
+  <a href="horizontal.html" class="btn btn-info" style="margin-bottom: 20px;">Left To Right</a>
   <script>
     ScannerEnabled = false;
     Row = 1;
@@ -123,12 +122,10 @@
       flag enabled. Currently no iOS support (3/9/20).</p>
     <br>
     <p>Instructions</p>
-    <p>1. Select Start Scanning (move to the right)</p>
+    <p>1. Select Start Scanning (move from the bottom upwards)</p>
     <p>2. Select Stop Scanning (stop)</p>
     <p>3. Data points are stored in chronological order</p>
-    <p>4. Select Start Scanning (move to the left)</p>
-    <p>5. Select Stop Scanning (stop)</p>
-    <p>6. Data points are stored in reverse chronological order</p>
+    <p>4. Move position to the right and repeat</p>
     <br>
   </div>
 
@@ -428,28 +425,17 @@
 
           let length = PassData.length;
           let parsed;
-          if (length > 0) {
-            let modder = Row%2;
-            if(modder === 1){
-              for (let i = 0; i < length; i++) {
-                parsed = JSON.parse(PassData[i]);
-                parsed.ID = UniqueID;
-                OutputData.push(parsed);
-                UniqueID++;
-              }
-            }
-            else{
-              for (let i = length-1; i >= 0; i--) {
-                parsed = JSON.parse(PassData[i]);
-                parsed.ID = UniqueID;
-                OutputData.push(parsed);
-                UniqueID++;
-              }
-            }
-            UniqueID = 1;
-            PassData = [];
-            createTable();
+
+          for (let i = 0; i < length; i++) {
+            parsed = JSON.parse(PassData[i]);
+            parsed.ID = UniqueID;
+            OutputData.push(parsed);
+            UniqueID++;
           }
+
+          UniqueID = 1;
+          PassData = [];
+          createTable();
           Row++;
 
           let csv = document.getElementById("csv");
@@ -495,7 +481,7 @@
               },
 
               subtitle: {
-                  text: 'Manual Scanning Left -> Right, Right -> Left',
+                  text: 'Manual Scanning Bottom -> Up',
                   align: 'left',
                   x: 40
               },
@@ -513,7 +499,7 @@
                   endOnTick: false,
                   tickWidth: 1,
                   min: 1,
-                  reversed: true
+                  reversed: false
               },
 
               yAxis: {
