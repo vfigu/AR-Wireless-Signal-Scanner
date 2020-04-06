@@ -30,7 +30,7 @@
 <body>
 
 <div class="container-fluid">
-  <h1>Bluetooth Scanner | Single Points 1.1</h1>
+  <h1>Bluetooth Scanner | Single Points 1.2</h1>
   <a href="../index.html" class="btn light" style="margin-bottom: 20px;">Home</a>
   <a href="vertical.html" class="btn btn-warning" style="margin-bottom: 20px;">Bottom Upwards</a>
   <a href="horizontal.html" class="btn btn-info" style="margin-bottom: 20px;">Left To Right</a>
@@ -425,6 +425,7 @@
                 parsed = JSON.parse(PassData[i]);
                 parsed.ID = UniqueID;
                 OutputData.push(parsed);
+                UniqueID++;
               }
             }
             else{
@@ -432,6 +433,7 @@
                 parsed = JSON.parse(PassData[i]);
                 parsed.ID = UniqueID;
                 OutputData.push(parsed);
+                UniqueID++;
               }
             }
             UniqueID = 1;
@@ -465,7 +467,6 @@
         });
         $('#stop-button').on('click', function () {
           PassData.push(CurrentData);
-          UniqueID++;
           createTable();
         });
         $('#create-graph').on('click', function () {
