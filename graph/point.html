@@ -30,16 +30,18 @@
 <body>
 
 <div class="container-fluid">
-  <h1>Bluetooth Scanner | Bottom Upwards 1.1</h1>
+  <h1>Bluetooth Scanner | Single Points 1.0</h1>
   <a href="../index.html" class="btn light" style="margin-bottom: 20px;">Home</a>
+  <a href="vertical.html" class="btn btn-warning" style="margin-bottom: 20px;">Bottom Upwards</a>
   <a href="horizontal.html" class="btn btn-info" style="margin-bottom: 20px;">Left To Right</a>
-  <a href="point.html" class="btn btn-danger" style="margin-bottom: 20px;">Single Point</a>
+
   <script>
     ScannerEnabled = false;
     Row = 1;
     UniqueID = 1;
     OutputData = [];
     PassData = [];
+    CurrentData = "";
     // OutputData = [
     //     {
     //         "Row": 1,
@@ -123,10 +125,8 @@
       flag enabled. Currently no iOS support (3/9/20).</p>
     <br>
     <p>Instructions</p>
-    <p>1. Select Start Scanning (move from the bottom upwards)</p>
-    <p>2. Select Stop Scanning (stop)</p>
-    <p>3. Data points are stored in chronological order</p>
-    <p>4. Move position to the right and repeat</p>
+    <p>1. Select Start Scanning (at stationary point)</p>
+    <p>2. Snapshot at stationary point is stored</p>
     <br>
   </div>
 
@@ -146,11 +146,12 @@
         <input type="text" class="form-control" id="namePrefix" placeholder="Enter Name Prefix" disabled>
       </div>
       <br>
-      <button id="start-button" type="submit" class="btn btn-primary">Start Bluetooth Scan</button>
+      <button id="start-button" type="submit" class="btn btn-primary">Start Scan</button>
     </fieldset>
   </form>
-  <button id="continue-button" class="btn btn-primary" style="display: none;">Continue Scan</button>
-  <button id="stop-button" class="btn btn-danger" style="display: none;">Stop Scan</button>
+  <button id="stop-button" class="btn btn-primary" style="display: none;">Save Point</button>
+  <button id="next-button" class="btn btn-info" style="display: none;">Next Row</button>
+  <button id="pop-button" class="btn btn-danger" style="display: none;">Delete Last</button>
 
   <script>
     ChromeSamples = {
@@ -261,12 +262,14 @@
                   '", "Device Name": "' + event.device.name +
                   '", "Time": ' + event.timeStamp + ' }';
           log(result);
-          PassData.push(result);
+          CurrentData = result;
         }
       });
       document.getElementById("stop-button").removeAttribute("style");
       document.getElementById("start-button").removeAttribute("style");
       document.getElementById("start-button").setAttribute("style", "display: none;");
+      document.getElementById("next-button").setAttribute("style", "float: right;");
+      document.getElementById("pop-button").setAttribute("style", "float: right;");
 
       // setTimeout(stopScan, 20000);
       // function stopScan() {
@@ -281,11 +284,6 @@
 
   document.getElementById("display-button").addEventListener('click',function () {
     document.querySelector('#log').textContent = JSON.stringify(OutputData);
-  });
-  document.getElementById("continue-button").addEventListener('click',function () {
-    ScannerEnabled = true;
-    document.getElementById("stop-button").removeAttribute("style");
-    document.getElementById("continue-button").setAttribute("style", "display: none;");
   });
 </script>
 
@@ -417,26 +415,34 @@
           });
         }
 
-        $('#stop-button').on('click', function () {
+        $('#next-button').on('click', function () {
           ScannerEnabled = false;
           // stopScan();
-          document.getElementById("continue-button").removeAttribute("style");
-          document.getElementById("stop-button").removeAttribute("style");
-          document.getElementById("stop-button").setAttribute("style", "display: none;");
 
           let length = PassData.length;
           let parsed;
-
-          for (let i = 0; i < length; i++) {
-            parsed = JSON.parse(PassData[i]);
-            parsed.ID = UniqueID;
-            OutputData.push(parsed);
-            UniqueID++;
+          if (length > 0) {
+            let modder = Row%2;
+            if(modder === 1){
+              for (let i = 0; i < length; i++) {
+                parsed = JSON.parse(PassData[i]);
+                parsed.ID = UniqueID;
+                OutputData.push(parsed);
+                UniqueID++;
+              }
+            }
+            else{
+              for (let i = length-1; i >= 0; i--) {
+                parsed = JSON.parse(PassData[i]);
+                parsed.ID = UniqueID;
+                OutputData.push(parsed);
+                UniqueID++;
+              }
+            }
+            UniqueID = 1;
+            PassData = [];
+            createTable();
           }
-
-          UniqueID = 1;
-          PassData = [];
-          createTable();
           Row++;
 
           let csv = document.getElementById("csv");
@@ -458,6 +464,15 @@
           OutputData = [];
           createTable();
         });
+        $('#pop-button').on('click', function () {
+          OutputData.pop();
+          createTable();
+        });
+        $('#stop-button').on('click', function () {
+          PassData.push(CurrentData);
+          UniqueID++;
+          createTable();
+        });
         $('#create-graph').on('click', function () {
             document.getElementById("highcharts-graph").removeAttribute("style");
             document.getElementById("highcharts-graph").removeAttribute("style");
@@ -468,7 +483,7 @@
 
               chart: {
                   type: 'heatmap',
-                  inverted: false
+                  inverted: true
               },
 
               boost: {
@@ -482,7 +497,7 @@
               },
 
               subtitle: {
-                  text: 'Manual Scanning Bottom -> Up',
+                  text: 'Manual Scanning Left -> Right, Right -> Left',
                   align: 'left',
                   x: 40
               },
@@ -500,7 +515,7 @@
                   endOnTick: false,
                   tickWidth: 1,
                   min: 1,
-                  reversed: false
+                  reversed: true
               },
 
               yAxis: {
