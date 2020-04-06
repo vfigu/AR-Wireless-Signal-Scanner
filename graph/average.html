@@ -30,11 +30,11 @@
 <body>
 
 <div class="container-fluid">
-  <h1>Bluetooth Scanner | Single Points 1.3</h1>
+  <h1>Bluetooth Scanner | Average Points 1.0</h1>
   <a href="../index.html" class="btn light" style="margin-bottom: 20px;">Home</a>
   <a href="vertical.html" class="btn btn-warning" style="margin-bottom: 20px;">Bottom Upwards</a>
   <a href="horizontal.html" class="btn btn-info" style="margin-bottom: 20px;">Left To Right</a>
-  <a href="average.html" class="btn btn-success" style="margin-bottom: 20px;">Average</a>
+  <a href="point.html" class="btn btn-danger" style="margin-bottom: 20px;">Single Point</a>
 
   <script>
     ScannerEnabled = false;
@@ -42,7 +42,7 @@
     UniqueID = 1;
     OutputData = [];
     PassData = [];
-    CurrentData = "";
+    CurrentData = [];
     // OutputData = [
     //     {
     //         "Row": 1,
@@ -127,7 +127,8 @@
     <br>
     <p>Instructions</p>
     <p>1. Select Start Scanning (at stationary point)</p>
-    <p>2. Snapshot at stationary point is stored</p>
+    <p>2. Select Stop Scanning (at stationary point)</p>
+    <p>3. Average is calculated at stationary point and stored</p>
     <br>
   </div>
 
@@ -150,7 +151,8 @@
       <button id="start-button" type="submit" class="btn btn-primary">Start Scan</button>
     </fieldset>
   </form>
-  <button id="stop-button" class="btn btn-primary" style="display: none;">Save Point</button>
+  <button id="continue-button" class="btn btn-primary" style="display: none;">Continue Scan</button>
+  <button id="stop-button" class="btn btn-warning" style="display: none;">Stop Scan</button>
   <button id="next-button" class="btn btn-info" style="display: none;">Next Row</button>
   <button id="pop-button" class="btn btn-danger" style="display: none;">Delete Last</button>
 
@@ -263,7 +265,7 @@
                   '", "Device Name": "' + event.device.name +
                   '", "Time": ' + event.timeStamp + ' }';
           log(result);
-          CurrentData = result;
+          CurrentData.push(result);
         }
       });
       document.getElementById("stop-button").removeAttribute("style");
@@ -285,6 +287,12 @@
 
   document.getElementById("display-button").addEventListener('click',function () {
     document.querySelector('#log').textContent = JSON.stringify(OutputData);
+  });
+
+  document.getElementById("continue-button").addEventListener('click',function () {
+    ScannerEnabled = true;
+    document.getElementById("stop-button").removeAttribute("style");
+    document.getElementById("continue-button").setAttribute("style", "display: none;");
   });
 </script>
 
@@ -467,8 +475,26 @@
           createTable();
         });
         $('#stop-button').on('click', function () {
-          PassData.push(CurrentData);
-          createTable();
+          ScannerEnabled = false;
+          // stopScan();
+          document.getElementById("continue-button").removeAttribute("style");
+          document.getElementById("stop-button").removeAttribute("style");
+          document.getElementById("stop-button").setAttribute("style", "display: none;");
+
+          let length = CurrentData.length;
+          if (length > 0) {
+            let ReturnData = JSON.parse(CurrentData[length - 1]);
+            log("sample size = " + length);
+
+            let sum = 0;
+            for (let i = 0; i < length; i++) {
+              sum += parseInt(JSON.parse(CurrentData[i]).RSSI);
+            }
+            let avg = sum / length;
+            ReturnData.RSSI = JSON.stringify(avg);
+            PassData.push(ReturnData);
+            CurrentData = [];
+          }
         });
         $('#create-graph').on('click', function () {
             document.getElementById("highcharts-graph").removeAttribute("style");
