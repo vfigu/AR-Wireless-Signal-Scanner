@@ -30,7 +30,7 @@
 <body>
 
 <div class="container-fluid">
-  <h1>Bluetooth Scanner | Average Points 1.0</h1>
+  <h1>Bluetooth Scanner | Average Points 1.1</h1>
   <a href="../index.html" class="btn light" style="margin-bottom: 20px;">Home</a>
   <a href="vertical.html" class="btn btn-warning" style="margin-bottom: 20px;">Bottom Upwards</a>
   <a href="horizontal.html" class="btn btn-info" style="margin-bottom: 20px;">Left To Right</a>
@@ -484,7 +484,6 @@
           let length = CurrentData.length;
           if (length > 0) {
             let ReturnData = JSON.parse(CurrentData[length - 1]);
-            log("sample size = " + length);
 
             let sum = 0;
             for (let i = 0; i < length; i++) {
@@ -492,8 +491,9 @@
             }
             let avg = sum / length;
             ReturnData.RSSI = JSON.stringify(avg);
-            PassData.push(ReturnData);
+            PassData.push(JSON.stringify(ReturnData));
             CurrentData = [];
+            log("n = " + length + " : " + JSON.stringify(ReturnData));
           }
         });
         $('#create-graph').on('click', function () {
