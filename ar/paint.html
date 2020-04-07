@@ -9,7 +9,7 @@
 <body>
 
 <div id="info">
-    <a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> Bluetooth Scanner | Paint AR 1.20<br/>Enable chrome://flags/#webxr-ar-module<br/>(Chrome Android 80+)
+    <a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> Bluetooth Scanner | Paint AR 1.21<br/>Enable chrome://flags/#webxr-ar-module<br/>(Chrome Android 80+)
 </div>
 
 <script type="module">
@@ -132,9 +132,22 @@
 
             } else {
 
-				current_painter.lineTo( cursor );
-				current_painter.update();
-
+            	if(painter === current_painter)
+				{
+					painter.lineTo( cursor );
+				}
+            	else{
+            		painter.moveTo(cursor);
+				}
+				if(painter2 === current_painter)
+				{
+					painter2.lineTo( cursor );
+				}
+				else{
+					painter2.moveTo(cursor);
+				}
+				painter.update();
+				painter2.update();
             }
 
         }
