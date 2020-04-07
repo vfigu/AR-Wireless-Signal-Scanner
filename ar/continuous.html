@@ -475,10 +475,10 @@
 	  var cursor = new THREE.Vector3();
 
 	  var geometry = new THREE.BoxBufferGeometry( 1, 1, 1 );
-	  var red_material = new THREE.MeshBasicMaterial( { color: new THREE.Color(255,0,0) } );
-	  var orange_material = new THREE.MeshBasicMaterial( { color: new THREE.Color(255,150,0) } );
-	  var yellow_material = new THREE.MeshBasicMaterial( { color: new THREE.Color(255,255,0) } );
-	  var green_material = new THREE.MeshBasicMaterial( { color: new THREE.Color(0,255,0) } );
+	  var red_material = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
+	  var orange_material = new THREE.MeshBasicMaterial( { color: 0xff781f } );
+	  var yellow_material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+	  var green_material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
 	  var mesh = new THREE.Mesh( geometry, red_material );
 	  const start = Date.now();
 
@@ -643,15 +643,15 @@
 
 	  function render() {
 
-		  if(RSSI < -55){
+		  if(RSSI < -65){
 			  // Red
 			  current_painter = painter;
 		  }
-		  else if(RSSI < -51){
+		  else if(RSSI < -55){
 			  // Orange
 			  current_painter = painter2;
 		  }
-		  else if(RSSI < -48){
+		  else if(RSSI < -45){
 			  // Yellow
 			  current_painter = painter3;
 		  }
