@@ -9,7 +9,7 @@
 <body>
 
 <div id="info">
-    <a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> Bluetooth Scanner | Paint AR 1.16<br/>Enable chrome://flags/#webxr-ar-module<br/>(Chrome Android 80+)
+    <a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> Bluetooth Scanner | Paint AR 1.17<br/>Enable chrome://flags/#webxr-ar-module<br/>(Chrome Android 80+)
 </div>
 
 <script type="module">
@@ -20,7 +20,7 @@
 
     var container;
     var camera, scene, renderer;
-    var controller, painter;
+    var controller, painter, painter2;
 
     var cursor = new THREE.Vector3();
 
@@ -66,6 +66,12 @@
         painter.mesh.material.side = THREE.DoubleSide;
 		painter.mesh.material = new_material;
         scene.add( painter.mesh );
+
+		painter2 = new TubePainter();
+		painter2.setSize( 0.7 );
+		painter2.mesh.material.side = THREE.DoubleSide;
+		painter2.mesh.material = new_material;
+		scene.add( painter2.mesh );
 
         //
 
