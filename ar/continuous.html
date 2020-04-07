@@ -28,7 +28,7 @@
   <body>
 
   <div class="container-fluid">
-  	<h1>Bluetooth Scanner | 3D Mapper (beta) 1.8 </h1>
+  	<h1>Bluetooth Scanner | 3D Mapper (beta) 1.9 </h1>
 	<a href="../index.html" class="btn light" style="margin-bottom: 20px;">Home</a>
 	<a href="geolocation.html" class="btn btn-info" style="margin-bottom: 20px;">Geolocation</a>
 	<a href="rotation.html" class="btn btn-danger" style="margin-bottom: 20px;">Rotation</a>
@@ -475,7 +475,7 @@
 	  var cursor = new THREE.Vector3();
 
 	  var geometry = new THREE.BoxBufferGeometry( 1, 1, 1 );
-	  var red_material = new THREE.MeshBasicMaterial( { color: new THREE.Color(255,0,0) } );
+	  var red_material = new THREE.MeshBasicMaterial( { color: new THREE.Color(0,0,0) } );
 	  var orange_material = new THREE.MeshBasicMaterial( { color: new THREE.Color(240,180,0) } );
 	  var yellow_material = new THREE.MeshBasicMaterial( { color: new THREE.Color(255,255,0) } );
 	  var green_material = new THREE.MeshBasicMaterial( { color: new THREE.Color(0,255,0) } );
@@ -515,25 +515,25 @@
 		  //
 
 		  painter = new TubePainter();
-		  painter.setSize( 0.7 );
+		  painter.setSize( 0.8 );
 		  painter.mesh.material.side = THREE.DoubleSide;
 		  painter.mesh.material = red_material;
 		  scene.add( painter.mesh );
 
 		  painter2 = new TubePainter();
-		  painter2.setSize( 0.7 );
+		  painter2.setSize( 0.8 );
 		  painter2.mesh.material.side = THREE.DoubleSide;
 		  painter2.mesh.material = orange_material;
 		  scene.add( painter2.mesh );
 
 		  painter3 = new TubePainter();
-		  painter3.setSize( 0.7 );
+		  painter3.setSize( 0.8 );
 		  painter3.mesh.material.side = THREE.DoubleSide;
 		  painter3.mesh.material = yellow_material;
 		  scene.add( painter3.mesh );
 
 		  painter4 = new TubePainter();
-		  painter4.setSize( 0.7 );
+		  painter4.setSize( 0.8 );
 		  painter4.mesh.material.side = THREE.DoubleSide;
 		  painter4.mesh.material = green_material;
 		  scene.add( painter4.mesh );
@@ -643,15 +643,15 @@
 
 	  function render() {
 
-		  if(RSSI < -65){
-			  // Red
+		  if(RSSI < -60){
+			  // Black
 			  current_painter = painter;
 		  }
-		  else if(RSSI < -55){
-			  // Orange
+		  else if(RSSI < -50){
+			  // Red
 			  current_painter = painter2;
 		  }
-		  else if(RSSI < -45){
+		  else if(RSSI < -42){
 			  // Yellow
 			  current_painter = painter3;
 		  }
