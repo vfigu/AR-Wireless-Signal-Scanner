@@ -9,7 +9,7 @@
 <body>
 
 <div id="info">
-    <a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> Bluetooth Scanner | Paint AR 1.19<br/>Enable chrome://flags/#webxr-ar-module<br/>(Chrome Android 80+)
+    <a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> Bluetooth Scanner | Paint AR 1.20<br/>Enable chrome://flags/#webxr-ar-module<br/>(Chrome Android 80+)
 </div>
 
 <script type="module">
@@ -147,13 +147,6 @@
     }
 
     function render() {
-
-    	if(((Date.now() - start)%255) > 175){
-			current_painter = painter;
-		}
-    	else{
-			current_painter = painter2;
-		}
 
         handleController( controller );
 
