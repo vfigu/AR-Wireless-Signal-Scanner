@@ -9,7 +9,7 @@
 <body>
 
 <div id="info">
-    <a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> Bluetooth Scanner | Paint AR 1.16<br/>Enable chrome://flags/#webxr-ar-module<br/>(Chrome Android 80+)
+    <a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> Bluetooth Scanner | Paint AR 1.17<br/>Enable chrome://flags/#webxr-ar-module<br/>(Chrome Android 80+)
 </div>
 
 <script type="module">
@@ -69,13 +69,6 @@
         painter1.mesh.material.side = THREE.DoubleSide;
 		painter1.mesh.material = red;
         scene.add( painter1.mesh );
-
-		painter2 = new TubePainter();
-		painter2.setSize( 0.7 );
-		painter2.mesh.material.side = THREE.DoubleSide;
-		painter2.mesh.material = green;
-		scene.add( painter2.mesh );
-
 
         //
 
@@ -142,29 +135,6 @@
 
 			}
 		}
-		else{
-			if ( userData.isSelecting === true ) {
-
-				if ( userData.skipFrames >= 0 ) {
-
-					// TODO(mrdoob) Revisit this
-
-					userData.skipFrames --;
-
-					painter2.moveTo( cursor );
-
-				} else {
-
-					painter2.lineTo( cursor );
-					painter2.update();
-
-				}
-
-			}
-		}
-
-
-
     }
 
     function animate() {
