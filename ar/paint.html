@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Bluetooth Scanner | Paint AR 1.0</title>
+    <title>Bluetooth Scanner | Paint AR</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <link type="text/css" rel="stylesheet" href="main.css">
@@ -9,7 +9,7 @@
 <body>
 
 <div id="info">
-    <a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> Bluetooth Scanner | Paint AR<br/>Enable chrome://flags/#webxr-ar-module<br/>(Chrome Android 80+)
+    <a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> Bluetooth Scanner | Paint AR 1.1<br/>Enable chrome://flags/#webxr-ar-module<br/>(Chrome Android 80+)
 </div>
 
 <script type="module">
@@ -18,13 +18,11 @@
     import { TubePainter } from './jsm/misc/TubePainter.js';
     import { ARButton } from './jsm/webxr/ARButton.js';
 
-	var container;
-	var positionSpan;
+    var container;
     var camera, scene, renderer;
     var controller, painter;
 
     var cursor = new THREE.Vector3();
-	var vector;
 
     init();
     animate();
@@ -32,15 +30,11 @@
     function init() {
 
         container = document.createElement( 'div' );
-		positionSpan = document.createElement( 'span' );
-		container.appendChild( positionSpan );
         document.body.appendChild( container );
-
 
         scene = new THREE.Scene();
 
         camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 20 );
-
 
         //
 
@@ -110,9 +104,6 @@
         var userData = controller.userData;
 
         cursor.set( 0, 0, - 0.2 ).applyMatrix4( controller.matrixWorld );
-
-		vector = camera.position;
-		positionSpan.innerHTML = "x = " + vector.x + " , y = " + vector.y + " , z = " + vector.z;
 
         if ( userData.isSelecting === true ) {
 
