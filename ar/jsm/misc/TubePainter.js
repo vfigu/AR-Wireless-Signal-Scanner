@@ -152,18 +152,6 @@ function TubePainter() {
 
 	}
 
-	function drawTo( position ) {
-
-		point1.copy( position );
-		matrix1.lookAt( point1, point1, up );
-
-		stroke( point1, point1, matrix1, matrix1 );
-
-		point2.copy( point1 );
-		matrix2.copy( matrix1 );
-
-	}
-
 	function lineTo( position ) {
 
 		point1.copy( position );
