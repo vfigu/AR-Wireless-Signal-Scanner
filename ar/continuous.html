@@ -28,7 +28,7 @@
   <body>
 
   <div class="container-fluid">
-	  <h1>Bluetooth Scanner | 3D Mapper 1.2 </h1>
+	  <h1>Bluetooth Scanner | 3D Mapper 1.3 </h1>
 		<a href="../index.html" class="btn light" style="margin-bottom: 20px;">Home</a>
 	<a href="geolocation.html" class="btn btn-warning" style="margin-bottom: 20px;">Geolocation</a>
 	<a href="rotation.html" class="btn btn-info" style="margin-bottom: 20px;">Rotation</a>
@@ -640,14 +640,14 @@
 
 	  function render() {
 
-		  let rate = (Date.now() - start)%255;
-		  if(rate > 200){
+		  let rate = JSON.parse(PassData[PassData.length()-1]).RSSI;
+		  if(rate < 80){
 			  current_painter = painter;
 		  }
-		  else if(rate > 150){
+		  else if(rate < 60){
 			  current_painter = painter2;
 		  }
-		  else if(rate > 100){
+		  else if(rate < 40){
 			  current_painter = painter3;
 		  }
 		  else{
