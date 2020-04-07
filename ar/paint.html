@@ -9,7 +9,7 @@
 <body>
 
 <div id="info">
-    <a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> Bluetooth Scanner | Paint AR 1.7<br/>Enable chrome://flags/#webxr-ar-module<br/>(Chrome Android 80+)
+    <a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> Bluetooth Scanner | Paint AR 1.8<br/>Enable chrome://flags/#webxr-ar-module<br/>(Chrome Android 80+)
 </div>
 
 <script type="module">
@@ -121,6 +121,8 @@
 
             } else {
 
+
+				painter.mesh.material = new_material;
                 painter.lineTo( cursor );
                 painter.update();
 
@@ -137,9 +139,6 @@
     }
 
     function render() {
-
-
-		painter.mesh.material = new_material;
 
         handleController( controller );
 
