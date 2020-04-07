@@ -9,7 +9,7 @@
 <body>
 
 <div id="info">
-    <a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> Bluetooth Scanner | Paint AR 1.10<br/>Enable chrome://flags/#webxr-ar-module<br/>(Chrome Android 80+)
+    <a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> Bluetooth Scanner | Paint AR 1.11<br/>Enable chrome://flags/#webxr-ar-module<br/>(Chrome Android 80+)
 </div>
 
 <script type="module">
@@ -110,6 +110,12 @@
 
         cursor.set( 0, 0, - 0.2 ).applyMatrix4( controller.matrixWorld );
 
+
+		let pick = (Date().now() - start)%255;
+		new_material = new THREE.MeshBasicMaterial( { color: new THREE.Color(pick,0,0) } );
+		painter.mesh.material = new_material;
+
+
         if ( userData.isSelecting === true ) {
 
             if ( userData.skipFrames >= 0 ) {
@@ -138,10 +144,6 @@
     }
 
     function render() {
-
-    	let pick = (Date().now() - start)%255;
-		new_material = new THREE.MeshBasicMaterial( { color: new THREE.Color(pick,0,0) } );
-		painter.mesh.material = new_material;
 
         handleController( controller );
 
