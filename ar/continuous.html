@@ -475,10 +475,10 @@
 	  var cursor = new THREE.Vector3();
 
 	  var geometry = new THREE.BoxBufferGeometry( 1, 1, 1 );
-	  var red_material = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
-	  var orange_material = new THREE.MeshBasicMaterial( { color: 0xff781f } );
-	  var yellow_material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
-	  var green_material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+	  var red_material = new THREE.MeshBasicMaterial( { color: new THREE.Color(255,0,0) } );
+	  var orange_material = new THREE.MeshBasicMaterial( { color: new THREE.Color(240,180,0) } );
+	  var yellow_material = new THREE.MeshBasicMaterial( { color: new THREE.Color(255,255,0) } );
+	  var green_material = new THREE.MeshBasicMaterial( { color: new THREE.Color(0,255,0) } );
 	  var mesh = new THREE.Mesh( geometry, red_material );
 	  const start = Date.now();
 
