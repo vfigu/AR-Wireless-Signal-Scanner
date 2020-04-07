@@ -9,7 +9,7 @@
 <body>
 
 <div id="info">
-    <a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> Bluetooth Scanner | Paint AR 1.17<br/>Enable chrome://flags/#webxr-ar-module<br/>(Chrome Android 80+)
+    <a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> Bluetooth Scanner | Paint AR 1.15<br/>Enable chrome://flags/#webxr-ar-module<br/>(Chrome Android 80+)
 </div>
 
 <script type="module">
@@ -20,15 +20,12 @@
 
     var container;
     var camera, scene, renderer;
-    var controller;
-
-    var painter1, painter2;
+    var controller, painter;
 
     var cursor = new THREE.Vector3();
 
 	var geometry = new THREE.BoxBufferGeometry( 1, 1, 1 );
-	var red = new THREE.MeshBasicMaterial( { color: new THREE.Color(255,0,0) } );
-	var green = new THREE.MeshBasicMaterial( { color: new THREE.Color(0,255,0) } );
+	var new_material = new THREE.MeshBasicMaterial( { color: new THREE.Color(255,0,0) } );
 	var mesh = new THREE.Mesh( geometry, new_material );
 	const start = Date.now();
 
@@ -64,11 +61,10 @@
 
         //
 
-        painter1 = new TubePainter();
-        painter1.setSize( 0.7 );
-        painter1.mesh.material.side = THREE.DoubleSide;
-		painter1.mesh.material = red;
-        scene.add( painter1.mesh );
+        painter = new TubePainter();
+        painter.setSize( 0.7 );
+        painter.mesh.material.side = THREE.DoubleSide;
+        scene.add( painter.mesh );
 
         //
 
@@ -114,27 +110,25 @@
 
         cursor.set( 0, 0, - 0.2 ).applyMatrix4( controller.matrixWorld );
 
-        let rate = (Date.now() - start)%255;
-		if(rate > 175){
-			if ( userData.isSelecting === true ) {
+        if ( userData.isSelecting === true ) {
 
-				if ( userData.skipFrames >= 0 ) {
+            if ( userData.skipFrames >= 0 ) {
 
-					// TODO(mrdoob) Revisit this
+                // TODO(mrdoob) Revisit this
 
-					userData.skipFrames --;
+                userData.skipFrames --;
 
-					painter1.moveTo( cursor );
+                painter.moveTo( cursor );
 
-				} else {
+            } else {
 
-					painter1.lineTo( cursor );
-					painter1.update();
+                painter.lineTo( cursor );
+                painter.update();
 
-				}
+            }
 
-			}
-		}
+        }
+
     }
 
     function animate() {
@@ -144,6 +138,15 @@
     }
 
     function render() {
+
+    	if(((Date.now() - start)%255) > 175){
+			new_material = new THREE.MeshBasicMaterial( { color: new THREE.Color(255,0,0) } );
+		}
+    	else{
+			new_material = new THREE.MeshBasicMaterial( { color: new THREE.Color(0,255,0) } );
+		}
+
+		painter.mesh.material = new_material;
 
         handleController( controller );
 
