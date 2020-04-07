@@ -20,13 +20,14 @@
 
     var container;
     var camera, scene, renderer;
-    var controller, painter, painter2, current_painter;
+    var controller, painter, painter2, painter3, painter4, current_painter;
 
     var cursor = new THREE.Vector3();
 
 	var geometry = new THREE.BoxBufferGeometry( 1, 1, 1 );
 	var red_material = new THREE.MeshBasicMaterial( { color: new THREE.Color(255,0,0) } );
-
+	var orange_material = new THREE.MeshBasicMaterial( { color: new THREE.Color(255,150,0) } );
+	var yellow_material = new THREE.MeshBasicMaterial( { color: new THREE.Color(255,255,0) } );
 	var green_material = new THREE.MeshBasicMaterial( { color: new THREE.Color(0,255,0) } );
 	var mesh = new THREE.Mesh( geometry, red_material );
 	const start = Date.now();
@@ -72,8 +73,20 @@
 		painter2 = new TubePainter();
 		painter2.setSize( 0.7 );
 		painter2.mesh.material.side = THREE.DoubleSide;
-		painter2.mesh.material = green_material;
+		painter2.mesh.material = orange_material;
 		scene.add( painter2.mesh );
+
+		painter3 = new TubePainter();
+		painter3.setSize( 0.7 );
+		painter3.mesh.material.side = THREE.DoubleSide;
+		painter3.mesh.material = yellow_material;
+		scene.add( painter3.mesh );
+
+		painter4 = new TubePainter();
+		painter4.setSize( 0.7 );
+		painter4.mesh.material.side = THREE.DoubleSide;
+		painter4.mesh.material = green_material;
+		scene.add( painter4.mesh );
 
         //
 
@@ -129,6 +142,8 @@
 
 				painter.moveTo( cursor );
 				painter2.moveTo( cursor );
+				painter3.moveTo( cursor );
+				painter4.moveTo( cursor );
 
             } else {
 
@@ -146,8 +161,24 @@
 				else{
 					painter2.moveTo(cursor);
 				}
+				if(painter3 === current_painter)
+				{
+					painter3.lineTo( cursor );
+				}
+				else{
+					painter3.moveTo(cursor);
+				}
+				if(painter4 === current_painter)
+				{
+					painter4.lineTo( cursor );
+				}
+				else{
+					painter4.moveTo(cursor);
+				}
 				painter.update();
 				painter2.update();
+				painter3.update();
+				painter4.update();
             }
 
         }
@@ -162,11 +193,17 @@
 
     function render() {
 
-    	if(((Date.now() - start)%255) > 175){
+    	if(((Date.now() - start)%255) > 200){
 			current_painter = painter;
 		}
-    	else{
+		if(((Date.now() - start)%255) > 150){
 			current_painter = painter2;
+		}
+		if(((Date.now() - start)%255) > 100){
+			current_painter = painter3;
+		}
+    	else{
+			current_painter = painter4;
 		}
 
         handleController( controller );
