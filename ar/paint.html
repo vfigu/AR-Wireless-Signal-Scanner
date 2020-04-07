@@ -9,7 +9,7 @@
 <body>
 
 <div id="info">
-    <a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> Bluetooth Scanner | Paint AR 1.17<br/>Enable chrome://flags/#webxr-ar-module<br/>(Chrome Android 80+)
+    <a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> Bluetooth Scanner | Paint AR 1.18<br/>Enable chrome://flags/#webxr-ar-module<br/>(Chrome Android 80+)
 </div>
 
 <script type="module">
@@ -20,12 +20,14 @@
 
     var container;
     var camera, scene, renderer;
-    var controller, painter, painter2;
+    var controller, painter, painter2, current_painter;
 
     var cursor = new THREE.Vector3();
 
 	var geometry = new THREE.BoxBufferGeometry( 1, 1, 1 );
-	var new_material = new THREE.MeshBasicMaterial( { color: new THREE.Color(255,0,0) } );
+	var red_material = new THREE.MeshBasicMaterial( { color: new THREE.Color(255,0,0) } );
+
+	var green_material = new THREE.MeshBasicMaterial( { color: new THREE.Color(0,255,0) } );
 	var mesh = new THREE.Mesh( geometry, new_material );
 	const start = Date.now();
 
@@ -64,13 +66,13 @@
         painter = new TubePainter();
         painter.setSize( 0.7 );
         painter.mesh.material.side = THREE.DoubleSide;
-		painter.mesh.material = new_material;
+		painter.mesh.material = red_material;
         scene.add( painter.mesh );
 
 		painter2 = new TubePainter();
 		painter2.setSize( 0.7 );
 		painter2.mesh.material.side = THREE.DoubleSide;
-		painter2.mesh.material = new_material;
+		painter2.mesh.material = green_material;
 		scene.add( painter2.mesh );
 
         //
@@ -125,12 +127,12 @@
 
                 userData.skipFrames --;
 
-                painter.moveTo( cursor );
+				current_painter.moveTo( cursor );
 
             } else {
 
-                painter.lineTo( cursor );
-                painter.update();
+				current_painter.lineTo( cursor );
+				current_painter.update();
 
             }
 
@@ -147,10 +149,10 @@
     function render() {
 
     	if(((Date.now() - start)%255) > 175){
-			new_material = new THREE.MeshBasicMaterial( { color: new THREE.Color(255,0,0) } );
+			current_painter = painter;
 		}
     	else{
-			new_material = new THREE.MeshBasicMaterial( { color: new THREE.Color(0,255,0) } );
+			current_painter = painter2;
 		}
 
 		painter.mesh.material = new_material;
