@@ -9,7 +9,7 @@
 <body>
 
 <div id="info">
-    <a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> Bluetooth Scanner | Paint AR 1.6<br/>Enable chrome://flags/#webxr-ar-module<br/>(Chrome Android 80+)
+    <a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> Bluetooth Scanner | Paint AR 1.7<br/>Enable chrome://flags/#webxr-ar-module<br/>(Chrome Android 80+)
 </div>
 
 <script type="module">
@@ -23,6 +23,10 @@
     var controller, painter;
 
     var cursor = new THREE.Vector3();
+
+	var geometry = new THREE.BoxBufferGeometry( 1, 1, 1 );
+	var new_material = new THREE.MeshBasicMaterial( { color: 0xcddf00 } );
+	var mesh = new THREE.Mesh( geometry, new_material );
 
     init();
     animate();
@@ -135,7 +139,7 @@
     function render() {
 
 
-		painter.color = new THREE.Color( 0xe46851 );
+		painter.mesh.material = new_material;
 
         handleController( controller );
 
