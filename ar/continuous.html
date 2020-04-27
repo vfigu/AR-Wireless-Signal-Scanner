@@ -28,7 +28,7 @@
   <body>
 
   <div class="container-fluid">
-  	<h1>Bluetooth Scanner | 3D Mapper (beta) 1.12 </h1>
+  	<h1>Bluetooth Scanner | 3D Mapper (beta) 1.13 </h1>
 	<a href="../index.html" class="btn light" style="margin-bottom: 20px;">Home</a>
 	<a href="geolocation.html" class="btn btn-info" style="margin-bottom: 20px;">Geolocation</a>
 	<a href="rotation.html" class="btn btn-danger" style="margin-bottom: 20px;">Rotation</a>
@@ -488,7 +488,6 @@
 	  var yellow_material = new THREE.MeshBasicMaterial( { color: new THREE.Color(255,255,0) } );
 	  var green_material = new THREE.MeshBasicMaterial( { color: new THREE.Color(0,255,0) } );
 	  var mesh = new THREE.Mesh( geometry, blue_material );
-	  var cameraPos = new THREE.Vector3(0,0,0);
 
 	  const start = Date.now();
 
@@ -610,7 +609,9 @@
 				  if(painter === current_painter)
 				  {
 					  painter.lineTo( cursor );
-					  cameraPos = scene.getCamera.position;
+					  cameraCoor.x = -(camera.position.x * Math.cos(5.49779)) - (camera.position.z * Math.sin(5.49779));
+					  cameraCoor.z = (camera.position.x * Math.cos(0.78)) + (camera.position.z * Math.sin(0.78));
+					  cameraCoor.y = camera.position.y;
 				  }
 				  else{
 					  painter.moveTo(cursor);
@@ -618,7 +619,9 @@
 				  if(painter2 === current_painter)
 				  {
 					  painter2.lineTo( cursor );
-					  cameraPos = scene.getCamera.position;
+					  cameraCoor.x = -(camera.position.x * Math.cos(5.49779)) - (camera.position.z * Math.sin(5.49779));
+					  cameraCoor.z = (camera.position.x * Math.cos(0.78)) + (camera.position.z * Math.sin(0.78));
+					  cameraCoor.y = camera.position.y;
 				  }
 				  else{
 					  painter2.moveTo(cursor);
@@ -626,7 +629,9 @@
 				  if(painter3 === current_painter)
 				  {
 					  painter3.lineTo( cursor );
-					  cameraPos = scene.getCamera.position;
+					  cameraCoor.x = -(camera.position.x * Math.cos(5.49779)) - (camera.position.z * Math.sin(5.49779));
+					  cameraCoor.z = (camera.position.x * Math.cos(0.78)) + (camera.position.z * Math.sin(0.78));
+					  cameraCoor.y = camera.position.y;
 				  }
 				  else{
 					  painter3.moveTo(cursor);
@@ -634,7 +639,9 @@
 				  if(painter4 === current_painter)
 				  {
 					  painter4.lineTo( cursor );
-					  cameraPos = scene.getCamera.position;
+					  cameraCoor.x = -(camera.position.x * Math.cos(5.49779)) - (camera.position.z * Math.sin(5.49779));
+					  cameraCoor.z = (camera.position.x * Math.cos(0.78)) + (camera.position.z * Math.sin(0.78));
+					  cameraCoor.y = camera.position.y;
 				  }
 				  else{
 					  painter4.moveTo(cursor);
