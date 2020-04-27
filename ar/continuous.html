@@ -284,7 +284,6 @@
       document.querySelector('#log').textContent = JSON.stringify(OutputData);
     });
     document.getElementById("continue-button").addEventListener('click',function () {
-      ScannerEnabled = true;
       document.getElementById("stop-button").removeAttribute("style");
       document.getElementById("continue-button").setAttribute("style", "display: none;");
     });
@@ -343,7 +342,6 @@
         event.preventDefault();
 
         if (isWebBluetoothEnabled()) {
-          ScannerEnabled = true;
           ChromeSamples.clearLog();
           onButtonClick();
         }
@@ -601,6 +599,7 @@
 
 
 		  if ( userData.isSelecting === true ) {
+			  ScannerEnabled = true;
 
 			  cameraX = cursor.getComponent(0);
 			  cameraY = cursor.getComponent(1);
@@ -655,9 +654,7 @@
 
 		  }
 		  else {
-			  cameraX = 0;
-			  cameraY = 0;
-			  cameraZ = 0;
+			  ScannerEnabled = false;
 		  }
 	  }
 
