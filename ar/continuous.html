@@ -28,7 +28,7 @@
   <body>
 
   <div class="container-fluid">
-  	<h1>Bluetooth Scanner | 3D Mapper (beta) 2.0 </h1>
+  	<h1>Bluetooth Scanner | 3D Mapper (beta) 2.1 </h1>
 	<a href="../index.html" class="btn light" style="margin-bottom: 20px;">Home</a>
 	<a href="geolocation.html" class="btn btn-info" style="margin-bottom: 20px;">Geolocation</a>
 	<a href="rotation.html" class="btn btn-danger" style="margin-bottom: 20px;">Rotation</a>
@@ -494,11 +494,14 @@
 			  let csv = document.getElementById("csv");
 			  length = OutputData.length;
 
-			  let createdHTML = "Row,ID,RSSI\n";
+			  let createdHTML = "x,y,z\n";
 			  if (length > 0) {
 				for (let i = 0; i < length; i++) {
 					parsed = OutputData[i];
-					createdHTML += parsed.x + ',' + parsed.y + ',' + parsed.z + '\n';
+					newX = Math.round(parsed.x * 100);
+					newY = Math.round(parsed.y * 100);
+					newZ = Math.round(parsed.z * 100);
+					createdHTML += newX + ',' + newY + ',' + newZ + '\n';
 				}
 				csv.innerHTML = createdHTML;
 			  }
