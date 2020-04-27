@@ -28,7 +28,7 @@
   <body>
 
   <div class="container-fluid">
-  	<h1>Bluetooth Scanner | 3D Mapper (beta) 1.17 </h1>
+  	<h1>Bluetooth Scanner | 3D Mapper (beta) 1.18 </h1>
 	<a href="../index.html" class="btn light" style="margin-bottom: 20px;">Home</a>
 	<a href="geolocation.html" class="btn btn-info" style="margin-bottom: 20px;">Geolocation</a>
 	<a href="rotation.html" class="btn btn-danger" style="margin-bottom: 20px;">Rotation</a>
@@ -604,9 +604,9 @@
 
 		  if ( userData.isSelecting === true ) {
 
-			  cameraCoor.x = cursor.position.x;
-			  cameraCoor.y = cursor.position.y;
-			  cameraCoor.z = cursor.position.z;
+			  cameraCoor.x = cursor.x;
+			  cameraCoor.y = cursor.y;
+			  cameraCoor.z = cursor.z;
 
 			  if ( userData.skipFrames >= 0 ) {
 
