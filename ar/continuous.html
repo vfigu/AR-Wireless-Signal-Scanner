@@ -28,7 +28,7 @@
   <body>
 
   <div class="container-fluid">
-  	<h1>Bluetooth Scanner | 3D Mapper (beta) 1.16 </h1>
+  	<h1>Bluetooth Scanner | 3D Mapper (beta) 1.17 </h1>
 	<a href="../index.html" class="btn light" style="margin-bottom: 20px;">Home</a>
 	<a href="geolocation.html" class="btn btn-info" style="margin-bottom: 20px;">Geolocation</a>
 	<a href="rotation.html" class="btn btn-danger" style="margin-bottom: 20px;">Rotation</a>
@@ -511,6 +511,7 @@
 		  scene = new THREE.Scene();
 
 		  camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 20 );
+		  scene.add( camera );
 
 		  //
 
@@ -600,11 +601,12 @@
 
 		  cursor.set( 0, 0, - 0.2 ).applyMatrix4( controller.matrixWorld );
 
-		  cameraCoor.x = camera.position.x;
-		  cameraCoor.y = camera.position.y;
-		  cameraCoor.z = camera.position.z;
 
 		  if ( userData.isSelecting === true ) {
+
+			  cameraCoor.x = cursor.position.x;
+			  cameraCoor.y = cursor.position.y;
+			  cameraCoor.z = cursor.position.z;
 
 			  if ( userData.skipFrames >= 0 ) {
 
@@ -654,7 +656,11 @@
 			  }
 
 		  }
-
+		  else {
+			  cameraCoor.x = 0;
+			  cameraCoor.y = 0;
+			  cameraCoor.z = 0;
+		  }
 	  }
 
 	  function animate() {
