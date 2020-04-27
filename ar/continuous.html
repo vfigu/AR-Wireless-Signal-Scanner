@@ -28,25 +28,22 @@
   <body>
 
   <div class="container-fluid">
-  	<h1>Bluetooth Scanner | 3D Mapper (beta) 1.19 </h1>
+  	<h1>Bluetooth Scanner | 3D Mapper (beta) 1.20 </h1>
 	<a href="../index.html" class="btn light" style="margin-bottom: 20px;">Home</a>
 	<a href="geolocation.html" class="btn btn-info" style="margin-bottom: 20px;">Geolocation</a>
 	<a href="rotation.html" class="btn btn-danger" style="margin-bottom: 20px;">Rotation</a>
     <script>
 	  // Tracking camera position
-	  let cameraCoor = {
-	    "x": 0,
-	  	"y": 0,
-		"z": 0,
-	  };
-	  cameraCoor.x = 10;
+	  cameraX = 0;
+	  cameraY = 0;
+	  cameraZ = 0;
 
 	  // Storing info
-	  let ScannerEnabled = false;
-	  let OutputData = [];
-	  let PassData = [];
-	  let UniqueID = 1;
-	  let RSSI = 0;
+	  ScannerEnabled = false;
+	  OutputData = [];
+	  PassData = [];
+	  UniqueID = 1;
+	  RSSI = 0;
       // OutputData = [
       // {
       //   "Device ID": "12345",
@@ -249,9 +246,9 @@
             let result =
                     '{ "ID": ' + 0 +
                     ', "RSSI": ' + event.rssi +
-					', "x": ' + cameraCoor.x +
-					', "y": ' + cameraCoor.y +
-					', "z": ' + cameraCoor.z +
+					', "x": ' + cameraX +
+					', "y": ' + cameraY +
+					', "z": ' + cameraZ +
                     ', "Device ID": "' + event.device.id +
                     '", "Device Name": "' + event.device.name +
                     '", "Time": ' + event.timeStamp + ' }';
@@ -605,9 +602,9 @@
 
 		  if ( userData.isSelecting === true ) {
 
-			  cameraCoor.x = cursor.getComponent(0);
-			  cameraCoor.y = cursor.getComponent(1);
-			  cameraCoor.z = cursor.getComponent(2);
+			  cameraX = cursor.getComponent(0);
+			  cameraY = cursor.getComponent(1);
+			  cameraZ = cursor.getComponent(2);
 
 			  if ( userData.skipFrames >= 0 ) {
 
@@ -658,9 +655,9 @@
 
 		  }
 		  else {
-			  cameraCoor.x = 0;
-			  cameraCoor.y = 0;
-			  cameraCoor.z = 0;
+			  cameraX = 0;
+			  cameraY = 0;
+			  cameraZ = 0;
 		  }
 	  }
 
