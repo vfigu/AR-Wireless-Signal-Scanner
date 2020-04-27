@@ -28,16 +28,24 @@
   <body>
 
   <div class="container-fluid">
-  	<h1>Bluetooth Scanner | 3D Mapper (beta) 1.10 </h1>
+  	<h1>Bluetooth Scanner | 3D Mapper (beta) 1.11 </h1>
 	<a href="../index.html" class="btn light" style="margin-bottom: 20px;">Home</a>
 	<a href="geolocation.html" class="btn btn-info" style="margin-bottom: 20px;">Geolocation</a>
 	<a href="rotation.html" class="btn btn-danger" style="margin-bottom: 20px;">Rotation</a>
     <script>
-      ScannerEnabled = false;
-      OutputData = [];
-      PassData = [];
-      UniqueID = 1;
-      RSSI = 0;
+	  // Tracking camera position
+	  let cameraCoor = {
+	    "x": 0,
+	  	"y": 0,
+		"z": 0,
+	  };
+
+	  // Storing info
+	  let ScannerEnabled = false;
+	  let OutputData = [];
+	  let PassData = [];
+	  let UniqueID = 1;
+	  let RSSI = 0;
       // OutputData = [
       // {
       //   "Device ID": "12345",
@@ -240,7 +248,7 @@
                     ', "Device ID": "' + event.device.id +
                     '", "Device Name": "' + event.device.name +
                     '", "Time": ' + event.timeStamp + ' }';
-            log(result);
+            log(result + " X: " + cameraCoor.x);
             PassData.push(result);
             RSSI = event.rssi;
           }
@@ -480,6 +488,8 @@
 	  var yellow_material = new THREE.MeshBasicMaterial( { color: new THREE.Color(255,255,0) } );
 	  var green_material = new THREE.MeshBasicMaterial( { color: new THREE.Color(0,255,0) } );
 	  var mesh = new THREE.Mesh( geometry, blue_material );
+	  var cameraPos = new THREE.Vector3(0,0,0);
+
 	  const start = Date.now();
 
 	  init();
@@ -600,6 +610,7 @@
 				  if(painter === current_painter)
 				  {
 					  painter.lineTo( cursor );
+					  cameraPos = scene.getCamera.position;
 				  }
 				  else{
 					  painter.moveTo(cursor);
@@ -607,6 +618,7 @@
 				  if(painter2 === current_painter)
 				  {
 					  painter2.lineTo( cursor );
+					  cameraPos = scene.getCamera.position;
 				  }
 				  else{
 					  painter2.moveTo(cursor);
@@ -614,6 +626,7 @@
 				  if(painter3 === current_painter)
 				  {
 					  painter3.lineTo( cursor );
+					  cameraPos = scene.getCamera.position;
 				  }
 				  else{
 					  painter3.moveTo(cursor);
@@ -621,6 +634,7 @@
 				  if(painter4 === current_painter)
 				  {
 					  painter4.lineTo( cursor );
+					  cameraPos = scene.getCamera.position;
 				  }
 				  else{
 					  painter4.moveTo(cursor);
@@ -629,6 +643,10 @@
 				  painter2.update();
 				  painter3.update();
 				  painter4.update();
+
+				  cameraCoor.x = cameraPos.x;
+				  cameraCoor.y = cameraPos.y;
+				  cameraCoor.z = cameraPos.z;
 			  }
 
 		  }
